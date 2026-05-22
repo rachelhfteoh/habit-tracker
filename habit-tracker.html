@@ -1140,24 +1140,6 @@
     .target-adj-btn:active { transform: scale(0.86); }
     .target-adj-btn:disabled { opacity: 0.25; cursor: default; }
 
-    /* ── Target chip on habit card ── */
-    .target-chip {
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.6);
-      color: rgba(30,27,75,0.45);
-      cursor: pointer;
-      flex-shrink: 0;
-      border: none;
-      font-family: inherit;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      transition: background 0.12s, color 0.12s;
-    }
-    .target-chip:hover { background: rgba(255,255,255,0.95); color: #7c3aed; }
-    .target-chip:active { transform: scale(0.92); }
-
     /* ── Target edit sheet ── */
     .target-sheet-stepper {
       display: flex;
@@ -1390,7 +1372,7 @@
       </div>
       <div class="stat">
         <div class="stat-value" id="stat-streak">—</div>
-        <div class="stat-label">Best Streak</div>
+        <div class="stat-label">Top Streak</div>
       </div>
     </div>
 
@@ -1506,20 +1488,6 @@
   <div class="ep-grid" id="ep-grid"></div>
 </div>
 
-<div class="ep-overlay" id="target-overlay" onclick="closeTargetSheet()"></div>
-<div class="ep-sheet" id="target-sheet">
-  <div class="ep-handle"></div>
-  <div class="ep-title" id="target-sheet-title">Set Weekly Target</div>
-  <div class="target-sheet-stepper">
-    <button type="button" class="target-adj-btn lg" id="sheet-minus" onclick="changeSheetTarget(-1)">−</button>
-    <div>
-      <div class="target-sheet-count" id="sheet-target-count">1</div>
-      <div class="target-sheet-unit" id="sheet-target-unit">times / week</div>
-    </div>
-    <button type="button" class="target-adj-btn lg" id="sheet-plus"  onclick="changeSheetTarget(1)">+</button>
-  </div>
-  <button class="target-save-btn" onclick="saveTargetEdit()">Save</button>
-</div>
 
 <div class="settings-overlay" id="settings-overlay" onclick="closeSettingsSheet()"></div>
 <div class="settings-sheet" id="settings-sheet">
@@ -1583,8 +1551,6 @@
   let pendingTarget     = 1;       // target count for the habit being added
   let homeFilter        = 'all';   // 'all' | 'daily' | 'weekly'
   let pickerTarget      = null; // 'add' or habitId
-  let targetEditId      = null; // habitId being edited in target sheet
-  let sheetTargetValue  = 1;    // current value shown in target edit sheet
   let detailId          = null;
   let detailType        = 'daily';
   let detailTarget      = 1;
@@ -1749,13 +1715,6 @@
       : `${d1} ${m1} – ${d2} ${m2}`;
   }
 
-  function isPerfect(habit, week, td) {
-    const created = habit.createdAt || '1970-01-01';
-    const dates   = new Set(habit.dates || []);
-    const applicable = week.filter(ds => ds <= td && ds >= created);
-    return applicable.length > 0 && applicable.every(ds => dates.has(ds));
-  }
-
   // ── shared habit header ───────────────────────────────────────────────────
   function habitHeaderHtml(habit, isHomeView = false) {
     const s    = calcStreakByType(habit);
@@ -1792,10 +1751,6 @@
     const typeChip   = isHomeView
       ? `<button class="type-chip" onclick="event.stopPropagation(); cycleHabitType('${habit.id}')" title="Tap to change frequency">${typeIcon}</button>`
       : '';
-    const htype = habit.type || 'daily';
-    const targetChip = isHomeView && htype !== 'daily'
-      ? `<button class="target-chip" onclick="event.stopPropagation(); showTargetSheet('${habit.id}')" title="Set target">${habit.target || 1}×</button>`
-      : '';
     return `
       <div class="habit-header">
         <div class="habit-icon${isHomeView ? ' editable' : ''}" ${iconClick}>${emoji}</div>
@@ -1804,7 +1759,6 @@
           ${s > 0 ? '🔥' : '○'} ${s}${unit}
         </div>
         ${typeChip}
-        ${targetChip}
         ${completeBtn}
         ${calBtn}
         <button class="delete-btn" onclick="event.stopPropagation(); removeHabit('${habit.id}')" title="Delete">×</button>
@@ -1925,11 +1879,11 @@
 
       if (isFuture) {
         cls += ' future';
-      } else if (isPre) {
-        cls += ' pre';
       } else if (done) {
         cls += ' done clickable';
         onclick = `onclick="toggleDate('${habit.id}','${ds}',this)"`;
+      } else if (isPre) {
+        cls += ' pre';
       } else {
         const isRest = type === 'weekly' && (weekCounts.get(getWeekStart(ds))||0) >= habitTarget;
         if (isRest) {
@@ -2082,8 +2036,9 @@
           const htarget = h.target || 1;
           const weekMet = htype === 'weekly' && week.filter(ds => dates.has(ds)).length >= htarget;
           const squares = week.map(ds => {
-            if (ds < created || ds > td) return `<div class="wk-sq future"></div>`;
-            if (dates.has(ds))           return `<div class="wk-sq done" style="background:${p.accent}"></div>`;
+            if (ds > td)       return `<div class="wk-sq future"></div>`;
+            if (dates.has(ds)) return `<div class="wk-sq done" style="background:${p.accent}"></div>`;
+            if (ds < created)  return `<div class="wk-sq future"></div>`;
             if (ds === td)               return `<div class="wk-sq today-open"></div>`;
             if (weekMet)                 return `<div class="wk-sq rest"></div>`;
             return `<div class="wk-sq missed"></div>`;
@@ -2255,11 +2210,12 @@
 
         const h = data.habits.find(x => x.id === selectedCalHabit);
         const p = PALETTE[h.colorIdx ?? 0];
-        const s = calcStreak(h.dates);
+        const s = calcStreakByType(h);
+        const su = streakUnit(h);
         detail.innerHTML = `
           <div class="cal-habit-info">
             <div class="cal-habit-name">${esc(h.name)}</div>
-            <div class="streak-badge ${s > 0 ? 'hot' : 'cold'}">${s > 0 ? '🔥' : '○'} ${s}d</div>
+            <div class="streak-badge ${s > 0 ? 'hot' : 'cold'}">${s > 0 ? '🔥' : '○'} ${s}${su}</div>
           </div>
           <div class="legend" style="margin-bottom:8px">
             <div class="leg-item"><div class="leg-dot done"></div>Done</div>
@@ -2502,52 +2458,6 @@
       pendingTarget = 1;
     }
     render();
-  };
-
-  // ── Target edit sheet ────────────────────────────────────────────────────
-  window.showTargetSheet = function(id) {
-    const data = load();
-    const h    = data.habits.find(x => x.id === id);
-    if (!h) return;
-    targetEditId      = id;
-    sheetTargetValue  = h.target || 1;
-    const unit        = 'times / week';
-    const max         = 7;
-    document.getElementById('target-sheet-title').textContent = `Target for ${h.emoji || getHabitEmoji(h.name)} ${h.name}`;
-    document.getElementById('sheet-target-count').textContent = sheetTargetValue;
-    document.getElementById('sheet-target-unit').textContent  = unit;
-    document.getElementById('sheet-minus').disabled = sheetTargetValue <= 1;
-    document.getElementById('sheet-plus').disabled  = sheetTargetValue >= max;
-    document.getElementById('target-sheet').classList.add('show');
-    document.getElementById('target-overlay').classList.add('show');
-  };
-
-  window.closeTargetSheet = function() {
-    document.getElementById('target-sheet').classList.remove('show');
-    document.getElementById('target-overlay').classList.remove('show');
-    targetEditId = null;
-  };
-
-  window.changeSheetTarget = function(delta) {
-    const data = load();
-    const h    = data.habits.find(x => x.id === targetEditId);
-    const max  = 7;
-    sheetTargetValue = Math.max(1, Math.min(max, sheetTargetValue + delta));
-    document.getElementById('sheet-target-count').textContent = sheetTargetValue;
-    document.getElementById('sheet-minus').disabled = sheetTargetValue <= 1;
-    document.getElementById('sheet-plus').disabled  = sheetTargetValue >= max;
-  };
-
-  window.saveTargetEdit = function() {
-    if (!targetEditId) return;
-    const data = load();
-    const h    = data.habits.find(x => x.id === targetEditId);
-    if (!h) return;
-    h.target = sheetTargetValue;
-    save(data);
-    closeTargetSheet();
-    render();
-    showToast(`Target set to ${sheetTargetValue}×`);
   };
 
   // ── Habit detail sheet ────────────────────────────────────────────────────
