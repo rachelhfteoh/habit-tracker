@@ -63,6 +63,12 @@ Lessons learned, key decisions, and things to remember for future sessions.
 - **Why:** User felt the data wasn't meaningful after habit types were split into daily/weekly.
 - **Removed:** `renderStatsView`, `calcBestStreak`, all `.sts-*`, `.trend-*`, `.hb-*` CSS, nav button.
 
+### Target chip removed — detail sheet is the single place for target editing
+- **Decision:** Removed the `N×` target chip from weekly habit cards and its dedicated target sheet (`#target-sheet`).
+- **Why:** The habit detail sheet already lets you edit the target. Having two paths (chip → target sheet, AND detail sheet) was redundant and confusing.
+- **Removed:** `.target-chip` CSS, `#target-sheet` HTML, `targetEditId`/`sheetTargetValue` state vars, `showTargetSheet`/`closeTargetSheet`/`changeSheetTarget`/`saveTargetEdit` functions.
+- **Still present:** The CSS classes `.target-sheet-stepper`, `.target-adj-btn`, `.target-sheet-count`, `.target-sheet-unit`, `.target-save-btn` — these are reused by the detail sheet stepper. Do NOT remove them.
+
 ### Habit detail sheet — single place to edit type, target, note
 - **Decision:** Tapping a habit's name opens a detail bottom sheet with type toggle, target stepper, and "why" note.
 - **Why:** Consolidates settings into one place rather than scattered chips/sheets on the card.
@@ -117,8 +123,8 @@ Lessons learned, key decisions, and things to remember for future sessions.
 ## Things to Watch Out For
 
 - **SortableJS + re-render timing:** After a drag-reorder, there's an 80ms delay before `render()` is called. This is intentional — SortableJS needs to finish its own DOM cleanup first. Don't remove this delay.
-- **`isPerfect()` is defined but unused.** The PRF badge was removed. Don't accidentally reference it.
 - **Calendar week starts Sunday, but week strip and weekly tab are Mon–Sun.** `CAL_LABELS = ['Su','Mo','Tu','We','Th','Fr','Sa']`. Don't "fix" this — it's intentional for the calendar grid layout.
 - **`target` field is ignored for daily habits.** Don't add target UI to daily habit cards. The data field exists (defaulting to 1) but daily logic never reads it.
 - **`note` field is set via the detail sheet only.** It is not shown on the habit card itself. Don't add it to the card render.
 - **localStorage data is browser-specific.** Always open in Safari — data saved in Safari won't appear in Chrome and vice versa.
+- **`done` check must precede `isPre` check in calGridHtml and weekly grid.** If the user retroactively marks a day done (e.g. yesterday, on a habit created today), `isPre = true` would shadow the `done` state and show the day as grey. Always check `done` first — explicitly-marked dates take priority over the pre-creation guard.

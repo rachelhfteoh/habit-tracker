@@ -84,8 +84,6 @@ Key state variables:
 - `homeFilter` — `'all' | 'daily' | 'weekly'` — filters home habit list AND sets `pendingType`
 - `homeWeekOffset` — week nav offset for home week strip (0 = current week, -1 = last week, etc.)
 - `selectedHomeDate` — ISO date string of the day selected in the home week strip (default: today)
-- `targetEditId` — habit ID currently being edited in the target edit bottom sheet
-- `sheetTargetValue` — current stepper value shown in the target edit sheet
 - `detailId` — habit ID currently open in the detail sheet (null when closed)
 - `detailType`, `detailTarget`, `detailNote` — working state for the detail sheet while open
 
@@ -99,10 +97,6 @@ Key helpers:
 - `streakUnit(habit)` — returns `'d'` or `'w'`
 - `cycleHabitType(id)` — cycles Daily→Weekly→Daily, saves, re-renders
 - `setHabitType(type)` — sets `homeFilter` + `pendingType`, re-renders
-- `showTargetSheet(id)` — opens target edit bottom sheet for an existing habit
-- `closeTargetSheet()` — closes target edit sheet
-- `changeSheetTarget(delta)` — +/− buttons inside target edit sheet
-- `saveTargetEdit()` — saves sheet target value to habit, closes sheet, shows toast
 - `showHabitDetail(id)` — opens detail sheet; populates type, target, note fields
 - `closeHabitDetail()` — closes detail sheet
 - `setDetailType(type)` — toggles Daily/Weekly in detail sheet, shows/hides target row
@@ -115,7 +109,7 @@ Key helpers:
 
 ### Views
 
-**Home** — Week strip (Mon–Sun dots) at top; tap any past/today dot to select it. Swipe left/right to navigate weeks. Filter/type row (All / ☀️ Daily / 📅 Weekly) filters list and sets `pendingType`. Habit cards grouped into Daily / Weekly sections (or flat when filtered). Each card has: emoji (tap to change), **name (tap to open detail sheet)**, streak badge (d/w unit), type chip (tap to cycle), target chip (N× — weekly only, tap to open target sheet), complete button, calendar toggle, delete. Long-press to drag-reorder (SortableJS).
+**Home** — Week strip (Mon–Sun dots) at top; tap any past/today dot to select it. Swipe left/right to navigate weeks. Filter/type row (All / ☀️ Daily / 📅 Weekly) filters list and sets `pendingType`. Habit cards grouped into Daily / Weekly sections (or flat when filtered). Each card has: emoji (tap to change), **name (tap to open detail sheet)**, streak badge (d/w unit), type chip (tap to cycle), complete button, calendar toggle, delete. Long-press to drag-reorder (SortableJS).
 
 **Weekly** — 7-column habit×day grid (`wk-sq` cells), week nav, 4 summary stats. Rest days (weekly completions ≥ target) show as `.wk-sq.rest` (neutral) instead of missed (red).
 
