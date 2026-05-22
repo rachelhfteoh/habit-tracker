@@ -4,6 +4,16 @@ Lessons learned, key decisions, and things to remember for future sessions.
 
 ---
 
+## Native App Decisions
+
+### React Native / Expo port — started and abandoned
+- **What happened:** Rachel asked to port the HTML app to iOS using Expo React Native. A full plan was presented and approved. The Expo scaffold was created (`create-expo-app@latest`, SDK 56) and dependencies installed, but Rachel changed her mind before any source code was written. The scaffold was deleted cleanly.
+- **Why abandoned:** Rachel changed her mind mid-session — reason not given. No code was lost.
+- **Key finding:** Expo SDK 56 uses a new template structure — files live under `src/app/` (not `app/`), and uses `NativeTabs` from `expo-router/unstable-native-tabs` instead of the classic `Tabs`. This is worth knowing if we revisit the native app.
+- **Next time:** Before scaffolding, ask Rachel to confirm she is fully committed to the native app direction and understands it is a multi-session effort. Don't scaffold until she's sure.
+
+---
+
 ## Process Lessons
 
 ### Always plan before implementing

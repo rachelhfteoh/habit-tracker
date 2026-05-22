@@ -1,17 +1,17 @@
 # Project Context
 
 ## Current Status
-Single-file HTML habit tracker — v1.0 nearly done, 1 feature remaining.
+Single-file HTML habit tracker — v1.0 complete. Native app direction is TBD (see MEMORY.md).
 
 ## In Progress
-Nothing in progress — ready to start next feature.
+Nothing in progress.
 
 ## Up Next
-1. Browser reminders — daily push notification per habit (deferred to native app phase; skip for HTML version)
+1. Decide on native app approach — React Native/Expo was started then abandoned this session; reconsider in next session
 
 ## Backlog
-- Port habit-tracker.html logic into Expo React Native 
-  as a native app (longer term, not committed to yet)
+- Browser reminders — daily push notification per habit (handle in native app)
+- Native iOS app port — direction TBD
 
 ## Completed — Archive
 ✅ Core habit tracking — add, delete, complete habits
@@ -34,6 +34,7 @@ Nothing in progress — ready to start next feature.
 ✅ Dark mode — attempted and fully reverted (see MEMORY.md)
 ✅ Target picker row removed — manage targets via habit detail sheet instead
 ✅ Habit detail sheet — tap habit name → edit type, target, and "why" note in one place
+✅ Bug fixes — calendar/weekly sync for retroactive completions; correct streak unit in calendar tab; removed redundant target sheet
 
 ## Architecture Reference
 - Single file: habit-tracker.html (no build tools)
