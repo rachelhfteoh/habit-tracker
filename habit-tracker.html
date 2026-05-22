@@ -787,6 +787,15 @@
       color: #9ca3af;
       text-transform: uppercase;
     }
+    .wk-section-label {
+      grid-column: 1 / -1;
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(30,27,75,0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 10px 4px 2px;
+    }
     .wk-habit-row {
       display: grid;
       grid-template-columns: 1fr repeat(7, 26px);
@@ -1113,19 +1122,6 @@
       margin-top: 8px;
     }
 
-    /* ── Target picker row (below type picker, add form) ── */
-    .target-picker-row {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      margin-bottom: 14px;
-      background: rgba(255,255,255,0.6);
-      border-radius: 12px;
-      padding: 8px 14px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-
     .target-adj-btn {
       width: 32px; height: 32px;
       border-radius: 50%;
@@ -1143,15 +1139,6 @@
     }
     .target-adj-btn:active { transform: scale(0.86); }
     .target-adj-btn:disabled { opacity: 0.25; cursor: default; }
-
-    .target-count-label {
-      font-size: 14px;
-      font-weight: 800;
-      color: #7c3aed;
-      min-width: 100px;
-      text-align: center;
-      letter-spacing: -0.2px;
-    }
 
     /* ── Target chip on habit card ── */
     .target-chip {
@@ -1235,7 +1222,7 @@
     .type-chip:hover { background: rgba(255,255,255,0.95); color: #7c3aed; }
     .type-chip:active { transform: scale(0.92); }
 
-    /* ── Rest day (weekly/monthly target met, day not completed) ── */
+    /* ── Rest day (weekly target met, day not completed) ── */
     .day-cell.rest        { color: rgba(30,27,75,0.2); background: rgba(0,0,0,0.04); }
     .day-cell.rest:hover  { background: rgba(0,0,0,0.07); }
     .wk-sq.rest           { background: rgba(0,0,0,0.04); }
@@ -1275,168 +1262,87 @@
       .habit-name { font-size: 14px; }
     }
 
-    /* ══ STATS VIEW ══ */
-
-    .sts-section-title {
-      font-size: 11px;
-      font-weight: 800;
-      color: rgba(30,27,75,0.42);
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      margin: 20px 0 10px;
-    }
-
-    .sts-highlights {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .sts-card {
-      border-radius: 20px;
-      padding: 16px 14px 14px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    /* ── Habit detail sheet ── */
+    .detail-header {
       display: flex;
-      flex-direction: column;
-      gap: 5px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
     }
-
-    .sts-card:nth-child(1) { background: linear-gradient(135deg,#fef3c7 0%,#fcd34d 100%); }
-    .sts-card:nth-child(2) { background: linear-gradient(135deg,#d1fae5 0%,#6ee7b7 100%); }
-    .sts-card:nth-child(3) { background: linear-gradient(135deg,#ede9fe 0%,#c4b5fd 100%); }
-    .sts-card:nth-child(4) { background: linear-gradient(135deg,#dbeafe 0%,#93c5fd 100%); }
-
-    .sts-icon { font-size: 22px; line-height: 1; }
-
-    .sts-val {
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: -1px;
-      line-height: 1;
+    .detail-header-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1e1b4b;
+      letter-spacing: -0.3px;
     }
-
-    .sts-val-sup { font-size: 15px; font-weight: 700; opacity: 0.65; }
-
-    .sts-sub {
-      font-size: 11px;
-      font-weight: 600;
-      opacity: 0.55;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .detail-close-btn {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0,0,0,0.07);
+      color: #6b7280;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
     }
-
-    .sts-lbl {
+    .detail-section-label {
       font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.07em;
-      opacity: 0.42;
-      margin-top: 1px;
+      letter-spacing: 0.09em;
+      color: rgba(124,58,237,0.5);
+      margin: 16px 0 8px;
     }
-
-    .sts-card:nth-child(1) .sts-val { color: #92400e; }
-    .sts-card:nth-child(2) .sts-val { color: #065f46; }
-    .sts-card:nth-child(3) .sts-val { color: #5b21b6; }
-    .sts-card:nth-child(4) .sts-val { color: #1e40af; }
-
-    /* ── Trend chart ── */
-    .trend-chart {
-      background: rgba(255,255,255,0.72);
-      border-radius: 18px;
-      padding: 16px 14px 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-
-    .trend-bars {
+    .detail-type-row {
       display: flex;
-      align-items: flex-end;
-      gap: 5px;
-      height: 100px;
-      margin-bottom: 8px;
+      gap: 10px;
     }
-
-    .trend-col {
+    .detail-type-btn {
       flex: 1;
-      display: flex;
+      padding: 11px 0;
+      border-radius: 12px;
+      border: 1.5px solid rgba(124,58,237,0.25);
+      background: white;
+      color: #7c3aed;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .detail-type-btn.active {
+      background: #7c3aed;
+      color: white;
+      border-color: #7c3aed;
+    }
+    .detail-target-row {
+      display: none;
       flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      height: 100%;
-      gap: 3px;
     }
-
-    .trend-pct {
-      font-size: 9px;
-      font-weight: 800;
-      color: rgba(30,27,75,0.45);
-      line-height: 1;
-      flex-shrink: 0;
+    .detail-target-row.show {
+      display: flex;
     }
-
-    .trend-bar {
+    .detail-note-area {
       width: 100%;
-      border-radius: 5px 5px 3px 3px;
-      flex-shrink: 0;
-    }
-
-    .trend-bar.has-data  { background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%); }
-    .trend-bar.this-week { background: linear-gradient(180deg, #f9a8d4 0%, #ec4899 50%, #7c3aed 100%); }
-    .trend-bar.no-data   { background: rgba(0,0,0,0.07); }
-
-    .trend-labels {
-      display: flex;
-      gap: 5px;
-    }
-
-    .trend-lbl {
-      flex: 1;
-      text-align: center;
-      font-size: 8px;
-      font-weight: 700;
-      color: #9ca3af;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .trend-lbl.this-week { color: #7c3aed; font-weight: 900; }
-
-    /* ── Per-habit breakdown ── */
-    .habit-breakdown { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
-
-    .hb-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-radius: 18px;
+      box-sizing: border-box;
+      min-height: 100px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(124,58,237,0.15);
+      background: rgba(255,255,255,0.8);
       padding: 12px 14px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-    }
-
-    .hb-emoji { font-size: 22px; flex-shrink: 0; }
-
-    .hb-info { flex: 1; min-width: 0; }
-
-    .hb-name {
-      font-size: 13px;
-      font-weight: 700;
+      font-family: inherit;
+      font-size: 14px;
       color: #1e1b4b;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 5px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
+      line-height: 1.5;
     }
-
-    .hb-stats { display: flex; gap: 10px; flex-wrap: wrap; }
-
-    .hb-stat {
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(30,27,75,0.55);
-      white-space: nowrap;
+    .detail-note-area:focus {
+      border-color: rgba(124,58,237,0.45);
     }
-
-    .hb-stat strong { color: #1e1b4b; font-weight: 900; }
+    .detail-note-area::placeholder { color: rgba(30,27,75,0.3); }
   </style>
 </head>
 <body>
@@ -1471,13 +1377,6 @@
       <button type="button" class="type-btn active" data-type="all" onclick="setHabitType('all')">All</button>
       <button type="button" class="type-btn" data-type="daily"   onclick="setHabitType('daily')">☀️ Daily</button>
       <button type="button" class="type-btn" data-type="weekly"  onclick="setHabitType('weekly')">📅 Weekly</button>
-      <button type="button" class="type-btn" data-type="monthly" onclick="setHabitType('monthly')">🗓 Monthly</button>
-    </div>
-
-    <div class="target-picker-row" id="target-picker-row">
-      <button type="button" class="target-adj-btn" id="pending-minus" onclick="changePendingTarget(-1)">−</button>
-      <span class="target-count-label" id="pending-target-label">1 × / week</span>
-      <button type="button" class="target-adj-btn" id="pending-plus"  onclick="changePendingTarget(1)">+</button>
     </div>
 
     <div class="stats-row" id="home-stats" style="display:none">
@@ -1537,16 +1436,39 @@
 
   </div>
 
-  <!-- ══ STATS VIEW ══ -->
-  <div id="view-stats" class="view">
-    <div class="page-header">
-      <button class="back-home-btn" onclick="setView('home')" title="Back to Home">🏠</button>
-      <div><h1>All-Time Stats</h1></div>
-    </div>
-    <div id="stats-content"></div>
+</div><!-- /.app -->
+
+<div class="ep-overlay" id="detail-overlay" onclick="closeHabitDetail()"></div>
+<div class="ep-sheet" id="detail-sheet">
+  <div class="ep-handle"></div>
+  <div class="detail-header">
+    <div class="detail-header-title" id="detail-title"></div>
+    <button class="detail-close-btn" onclick="closeHabitDetail()">✕</button>
   </div>
 
-</div><!-- /.app -->
+  <div class="detail-section-label">Frequency</div>
+  <div class="detail-type-row">
+    <button class="detail-type-btn" id="detail-btn-daily"  onclick="setDetailType('daily')">☀️ Daily</button>
+    <button class="detail-type-btn" id="detail-btn-weekly" onclick="setDetailType('weekly')">📅 Weekly</button>
+  </div>
+
+  <div class="detail-target-row" id="detail-target-row">
+    <div class="detail-section-label">Target</div>
+    <div class="target-sheet-stepper">
+      <button class="target-adj-btn lg" id="detail-minus" onclick="changeDetailTarget(-1)">−</button>
+      <div>
+        <div class="target-sheet-count" id="detail-target-count">1</div>
+        <div class="target-sheet-unit">times / week</div>
+      </div>
+      <button class="target-adj-btn lg" id="detail-plus" onclick="changeDetailTarget(1)">+</button>
+    </div>
+  </div>
+
+  <div class="detail-section-label">Why this habit?</div>
+  <textarea id="detail-note" class="detail-note-area" placeholder="e.g. I want to build discipline and feel more calm each morning…" oninput="detailNote = this.value"></textarea>
+
+  <button class="target-save-btn" onclick="saveHabitDetail()">Save</button>
+</div>
 
 <nav class="bottom-nav">
   <button class="nav-btn active" id="nav-home" onclick="setView('home')">
@@ -1574,14 +1496,6 @@
       <line x1="3"  y1="10" x2="21" y2="10"/>
     </svg>
     Calendar
-  </button>
-  <button class="nav-btn" id="nav-stats" onclick="setView('stats')">
-    <svg viewBox="0 0 24 24">
-      <rect x="3"  y="12" width="4" height="9" rx="1"/>
-      <rect x="10" y="7"  width="4" height="14" rx="1"/>
-      <rect x="17" y="3"  width="4" height="18" rx="1"/>
-    </svg>
-    Stats
   </button>
 </nav>
 
@@ -1665,12 +1579,16 @@
   let habitMonths       = new Map();
   let selectedCalHabit  = null;
   let pendingEmoji      = null;
-  let pendingType       = 'daily'; // 'daily' | 'weekly' | 'monthly'
+  let pendingType       = 'daily'; // 'daily' | 'weekly'
   let pendingTarget     = 1;       // target count for the habit being added
-  let homeFilter        = 'all';   // 'all' | 'daily' | 'weekly' | 'monthly'
+  let homeFilter        = 'all';   // 'all' | 'daily' | 'weekly'
   let pickerTarget      = null; // 'add' or habitId
   let targetEditId      = null; // habitId being edited in target sheet
   let sheetTargetValue  = 1;    // current value shown in target edit sheet
+  let detailId          = null;
+  let detailType        = 'daily';
+  let detailTarget      = 1;
+  let detailNote        = '';
   let wkOffset          = 0;   // 0 = current week, -1 = last week, etc. (weekly tab)
   let homeWeekOffset    = 0;   // week nav on home strip (0 = current week)
   let selectedHomeDate  = todayStr(); // day selected in home week strip
@@ -1730,8 +1648,9 @@
         if (!h.dates && h.completedDates) { h.dates = h.completedDates; delete h.completedDates; dirty = true; }
         if (!h.dates) h.dates = [];
         if (h.colorIdx === undefined) { h.colorIdx = i % PALETTE.length; dirty = true; }
-        if (!h.type) { h.type = 'daily'; dirty = true; }
+        if (!h.type || h.type === 'monthly') { h.type = 'daily'; dirty = true; }
         if (h.target === undefined) { h.target = 1; dirty = true; }
+        if (h.note === undefined) { h.note = ''; dirty = true; }
         return h;
       });
       if (dirty) localStorage.setItem(KEY, JSON.stringify(data));
@@ -1759,20 +1678,6 @@
       cursor.setDate(cursor.getDate() - 1);
     }
     return n;
-  }
-
-  // ── all-time best streak ──────────────────────────────────────────────────
-  function calcBestStreak(dates) {
-    if (!dates || !dates.length) return 0;
-    const sorted = [...new Set(dates)].sort();
-    let best = 1, run = 1;
-    for (let i = 1; i < sorted.length; i++) {
-      const a = new Date(sorted[i-1] + 'T12:00:00');
-      const b = new Date(sorted[i]   + 'T12:00:00');
-      if (Math.round((b - a) / 86400000) === 1) { run++; if (run > best) best = run; }
-      else run = 1;
-    }
-    return best;
   }
 
   // ── per-type streak helpers ───────────────────────────────────────────────
@@ -1808,40 +1713,14 @@
     return n;
   }
 
-  function calcStreakMonthly(dates, target = 1) {
-    if (!dates || !dates.length) return 0;
-    const monthCounts = new Map();
-    dates.forEach(ds => { const k = ds.slice(0,7); monthCounts.set(k, (monthCounts.get(k)||0)+1); });
-    const metMonth = ym => (monthCounts.get(ym) || 0) >= target;
-    const now   = new Date();
-    const thisM = `${now.getFullYear()}-${pad2(now.getMonth()+1)}`;
-    const prevD = new Date(now.getFullYear(), now.getMonth()-1, 1);
-    const lastM = `${prevD.getFullYear()}-${pad2(prevD.getMonth()+1)}`;
-    let cursor;
-    if      (metMonth(thisM)) cursor = new Date(now.getFullYear(), now.getMonth(), 1);
-    else if (metMonth(lastM)) cursor = new Date(prevD);
-    else return 0;
-    let n = 0;
-    while (metMonth(`${cursor.getFullYear()}-${pad2(cursor.getMonth()+1)}`)) {
-      n++;
-      cursor.setMonth(cursor.getMonth() - 1);
-    }
-    return n;
-  }
-
   function calcStreakByType(habit) {
     const t = habit.type || 'daily';
-    const tgt = habit.target || 1;
-    if (t === 'weekly')  return calcStreakWeekly(habit.dates, tgt);
-    if (t === 'monthly') return calcStreakMonthly(habit.dates, tgt);
+    if (t === 'weekly') return calcStreakWeekly(habit.dates, habit.target || 1);
     return calcStreak(habit.dates);
   }
 
   function streakUnit(habit) {
-    const t = habit.type || 'daily';
-    if (t === 'weekly')  return 'w';
-    if (t === 'monthly') return 'm';
-    return 'd';
+    return (habit.type || 'daily') === 'weekly' ? 'w' : 'd';
   }
 
   // ── current week Mon–Sun (optional offset in weeks) ──────────────────────
@@ -1889,7 +1768,7 @@
     const calBtn = isHomeView ? `
       <button class="cal-toggle-btn${expanded ? ' active' : ''}"
               onclick="event.stopPropagation(); toggleHabitCal('${habit.id}')"
-              title="${expanded ? 'Hide calendar' : 'Show monthly calendar'}">
+              title="${expanded ? 'Hide calendar' : 'Show calendar'}">
         <svg viewBox="0 0 24 24">
           <rect x="3" y="4" width="18" height="18" rx="2"/>
           <line x1="16" y1="2" x2="16" y2="6"/>
@@ -1908,7 +1787,7 @@
     const iconClick = isHomeView
       ? `onclick="event.stopPropagation(); toggleEmojiPicker('${habit.id}')" title="Change emoji"`
       : '';
-    const TYPE_ICONS = { daily: '☀️', weekly: '📅', monthly: '🗓' };
+    const TYPE_ICONS = { daily: '☀️', weekly: '📅' };
     const typeIcon   = TYPE_ICONS[habit.type || 'daily'];
     const typeChip   = isHomeView
       ? `<button class="type-chip" onclick="event.stopPropagation(); cycleHabitType('${habit.id}')" title="Tap to change frequency">${typeIcon}</button>`
@@ -1920,7 +1799,7 @@
     return `
       <div class="habit-header">
         <div class="habit-icon${isHomeView ? ' editable' : ''}" ${iconClick}>${emoji}</div>
-        <div class="habit-name">${esc(habit.name)}</div>
+        <div class="habit-name" onclick="event.stopPropagation(); showHabitDetail('${habit.id}')" style="cursor:pointer">${esc(habit.name)}</div>
         <div class="streak-badge ${s > 0 ? 'hot' : 'cold'}">
           ${s > 0 ? '🔥' : '○'} ${s}${unit}
         </div>
@@ -2028,9 +1907,6 @@
     const weekCounts  = type === 'weekly'
       ? (habit.dates||[]).reduce((m, ds) => { const w=getWeekStart(ds); m.set(w,(m.get(w)||0)+1); return m; }, new Map())
       : null;
-    const monthCounts = type === 'monthly'
-      ? (habit.dates||[]).reduce((m, ds) => { const k=ds.slice(0,7); m.set(k,(m.get(k)||0)+1); return m; }, new Map())
-      : null;
 
     let html = '<div class="cal-grid">';
     CAL_LABELS.forEach(d => { html += `<div class="dow-label">${d}</div>`; });
@@ -2055,9 +1931,7 @@
         cls += ' done clickable';
         onclick = `onclick="toggleDate('${habit.id}','${ds}',this)"`;
       } else {
-        // Check if weekly/monthly target is already met — show as rest, not missed
-        const isRest = (type === 'weekly'  && (weekCounts.get(getWeekStart(ds))||0)  >= habitTarget)
-                    || (type === 'monthly' && (monthCounts.get(ds.slice(0,7))||0)     >= habitTarget);
+        const isRest = type === 'weekly' && (weekCounts.get(getWeekStart(ds))||0) >= habitTarget;
         if (isRest) {
           cls += ' rest clickable';
           onclick = `onclick="toggleDate('${habit.id}','${ds}',this)"`;
@@ -2085,18 +1959,7 @@
     const nowY    = new Date().getFullYear(), nowM = new Date().getMonth();
     let html      = '<div class="month-summary">';
 
-    if (type === 'monthly') {
-      const target  = habit.target || 1;
-      const key     = `${y}-${pad2(m+1)}`;
-      const count   = (habit.dates||[]).filter(ds => ds.startsWith(key)).length;
-      const met     = count >= target;
-      const isCur   = y === nowY && m === nowM;
-      const isPast  = y < nowY || (y === nowY && m < nowM);
-      if (met)           html += `<span class="ms-chip green">✓ ${count}/${target} done</span>`;
-      else if (isPast)   html += `<span class="ms-chip red">✗ ${count}/${target} done</span>`;
-      else if (isCur)    html += `<span class="ms-chip gray">${count}/${target} so far…</span>`;
-
-    } else if (type === 'weekly') {
+    if (type === 'weekly') {
       const target = habit.target || 1;
       const weekCounts = new Map();
       (habit.dates||[]).forEach(ds => { const w=getWeekStart(ds); weekCounts.set(w,(weekCounts.get(w)||0)+1); });
@@ -2210,20 +2073,19 @@
         statsEl.innerHTML = '';
       } else {
         // Grid
-        let rows = data.habits.map((h, idx) => {
+        const renderWkRow = h => {
           const p       = PALETTE[h.colorIdx ?? 0];
           const emoji   = h.emoji || getHabitEmoji(h.name);
           const dates   = new Set(h.dates || []);
           const created = h.createdAt || '1970-01-01';
           const htype   = h.type || 'daily';
           const htarget = h.target || 1;
-          const weekMet = htype === 'weekly'  && week.filter(ds => dates.has(ds)).length >= htarget;
-          const monMet  = htype === 'monthly' && week.filter(ds => dates.has(ds) && ds.slice(0,7) === week[0].slice(0,7)).length >= htarget;
+          const weekMet = htype === 'weekly' && week.filter(ds => dates.has(ds)).length >= htarget;
           const squares = week.map(ds => {
             if (ds < created || ds > td) return `<div class="wk-sq future"></div>`;
             if (dates.has(ds))           return `<div class="wk-sq done" style="background:${p.accent}"></div>`;
             if (ds === td)               return `<div class="wk-sq today-open"></div>`;
-            if (weekMet || monMet)       return `<div class="wk-sq rest"></div>`;
+            if (weekMet)                 return `<div class="wk-sq rest"></div>`;
             return `<div class="wk-sq missed"></div>`;
           }).join('');
           return `<div class="wk-habit-row" style="background:${p.grad}">
@@ -2233,7 +2095,12 @@
             </div>
             ${squares}
           </div>`;
-        }).join('');
+        };
+        const dailyHabits  = data.habits.filter(h => (h.type || 'daily') === 'daily');
+        const weeklyHabits = data.habits.filter(h => h.type === 'weekly');
+        let rows = '';
+        if (dailyHabits.length)  rows += `<div class="wk-section-label">☀️ Daily</div>` + dailyHabits.map(renderWkRow).join('');
+        if (weeklyHabits.length) rows += `<div class="wk-section-label">📅 Weekly</div>` + weeklyHabits.map(renderWkRow).join('');
 
         gridEl.innerHTML = `<div class="wk-grid-card">
           <div class="wk-header-row">
@@ -2283,8 +2150,6 @@
 
       document.getElementById('home-date').textContent = fmtLong(td);
       renderWeekStrip();
-      updateTargetPickerRow();
-
       if (total > 0) {
         const week         = getWeekDays(homeWeekOffset);
         const doneSelected = data.habits.filter(h => (h.dates||[]).includes(selectedHomeDate)).length;
@@ -2345,9 +2210,8 @@
         } else {
           // "All" view — show every type in grouped sections
           const GROUPS = [
-            { key: 'daily',   label: '☀️ Daily' },
-            { key: 'weekly',  label: '📅 Weekly' },
-            { key: 'monthly', label: '🗓 Monthly' },
+            { key: 'daily',  label: '☀️ Daily' },
+            { key: 'weekly', label: '📅 Weekly' },
           ];
           GROUPS.forEach(g => {
             const gh = data.habits.filter(h => (h.type || 'daily') === g.key);
@@ -2359,9 +2223,6 @@
         homeList.innerHTML = listHtml;
         initSortable();
       }
-
-    } else if (currentView === 'stats') {
-      renderStatsView(data);
 
     } else {
       // calendar view
@@ -2625,9 +2486,9 @@
     const data  = load();
     const h     = data.habits.find(x => x.id === id);
     if (!h) return;
-    const order = ['daily', 'weekly', 'monthly'];
-    const LABELS = { daily: '☀️ Daily', weekly: '📅 Weekly', monthly: '🗓 Monthly' };
-    h.type = order[(order.indexOf(h.type || 'daily') + 1) % 3];
+    const order = ['daily', 'weekly'];
+    const LABELS = { daily: '☀️ Daily', weekly: '📅 Weekly' };
+    h.type = order[(order.indexOf(h.type || 'daily') + 1) % 2];
     save(data);
     render();
     showToast(`${LABELS[h.type]}`);
@@ -2638,30 +2499,9 @@
     homeFilter = type;
     if (type !== 'all') {
       pendingType   = type;
-      pendingTarget = 1; // reset target when switching type
+      pendingTarget = 1;
     }
-    updateTargetPickerRow();
     render();
-  };
-
-  function updateTargetPickerRow() {
-    const row = document.getElementById('target-picker-row');
-    if (!row) return;
-    const show = (pendingType === 'weekly' || pendingType === 'monthly') && homeFilter !== 'all';
-    row.style.display = show ? 'flex' : 'none';
-    if (show) {
-      const unit = pendingType === 'weekly' ? 'week' : 'month';
-      document.getElementById('pending-target-label').textContent = `${pendingTarget} × / ${unit}`;
-      document.getElementById('pending-minus').disabled = pendingTarget <= 1;
-      const max = pendingType === 'weekly' ? 7 : 31;
-      document.getElementById('pending-plus').disabled  = pendingTarget >= max;
-    }
-  }
-
-  window.changePendingTarget = function(delta) {
-    const max = pendingType === 'weekly' ? 7 : 31;
-    pendingTarget = Math.max(1, Math.min(max, pendingTarget + delta));
-    updateTargetPickerRow();
   };
 
   // ── Target edit sheet ────────────────────────────────────────────────────
@@ -2671,8 +2511,8 @@
     if (!h) return;
     targetEditId      = id;
     sheetTargetValue  = h.target || 1;
-    const unit        = h.type === 'monthly' ? 'times / month' : 'times / week';
-    const max         = h.type === 'monthly' ? 31 : 7;
+    const unit        = 'times / week';
+    const max         = 7;
     document.getElementById('target-sheet-title').textContent = `Target for ${h.emoji || getHabitEmoji(h.name)} ${h.name}`;
     document.getElementById('sheet-target-count').textContent = sheetTargetValue;
     document.getElementById('sheet-target-unit').textContent  = unit;
@@ -2691,7 +2531,7 @@
   window.changeSheetTarget = function(delta) {
     const data = load();
     const h    = data.habits.find(x => x.id === targetEditId);
-    const max  = h && h.type === 'monthly' ? 31 : 7;
+    const max  = 7;
     sheetTargetValue = Math.max(1, Math.min(max, sheetTargetValue + delta));
     document.getElementById('sheet-target-count').textContent = sheetTargetValue;
     document.getElementById('sheet-minus').disabled = sheetTargetValue <= 1;
@@ -2710,141 +2550,67 @@
     showToast(`Target set to ${sheetTargetValue}×`);
   };
 
-  // ── Stats view ────────────────────────────────────────────────────────────
-  function renderStatsView(data) {
-    const el = document.getElementById('stats-content');
-    if (!el) return;
+  // ── Habit detail sheet ────────────────────────────────────────────────────
+  window.showHabitDetail = function(id) {
+    const data = load();
+    const h = data.habits.find(x => x.id === id);
+    if (!h) return;
+    detailId     = id;
+    detailType   = h.type || 'daily';
+    detailTarget = h.target || 1;
+    detailNote   = h.note  || '';
 
-    if (!data.habits.length) {
-      el.innerHTML = `<div class="empty"><div class="empty-icon">📊</div><p>Add some habits and start tracking to see your all-time stats!</p></div>`;
-      return;
-    }
+    const emoji = h.emoji || getHabitEmoji(h.name);
+    document.getElementById('detail-title').textContent = `${emoji} ${h.name}`;
 
-    const td = todayStr();
-    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('detail-btn-daily').classList.toggle('active',  detailType === 'daily');
+    document.getElementById('detail-btn-weekly').classList.toggle('active', detailType === 'weekly');
 
-    // ── Highlights ─────────────────────────────────────────────────────────
-    let allTimeBest = 0, allTimeTotal = 0;
-    let mostConsistentHabit = null, bestRate = -1;
-    const uniqueDays = new Set();
+    const tRow = document.getElementById('detail-target-row');
+    tRow.classList.toggle('show', detailType === 'weekly');
+    document.getElementById('detail-target-count').textContent = detailTarget;
+    document.getElementById('detail-minus').disabled = detailTarget <= 1;
+    document.getElementById('detail-plus').disabled  = detailTarget >= 7;
 
-    data.habits.forEach(h => {
-      const dates = h.dates || [];
-      allTimeTotal += dates.length;
-      dates.forEach(ds => uniqueDays.add(ds));
+    document.getElementById('detail-note').value = detailNote;
 
-      const best = calcBestStreak(dates);
-      if (best > allTimeBest) allTimeBest = best;
+    document.getElementById('detail-sheet').classList.add('show');
+    document.getElementById('detail-overlay').classList.add('show');
+  };
 
-      const created = h.createdAt || td;
-      const daysSince = Math.max(1, Math.round(
-        (new Date(td + 'T12:00:00') - new Date(created + 'T12:00:00')) / 86400000
-      ) + 1);
-      const rate = dates.length / daysSince;
-      if (rate > bestRate) { bestRate = rate; mostConsistentHabit = h; }
-    });
+  window.closeHabitDetail = function() {
+    document.getElementById('detail-sheet').classList.remove('show');
+    document.getElementById('detail-overlay').classList.remove('show');
+    detailId = null;
+  };
 
-    const activeDays         = uniqueDays.size;
-    const mostConsistentRate = Math.round(bestRate * 100);
-    const mcEmoji            = mostConsistentHabit
-      ? (mostConsistentHabit.emoji || getHabitEmoji(mostConsistentHabit.name)) : '';
+  window.setDetailType = function(type) {
+    detailType = type;
+    document.getElementById('detail-btn-daily').classList.toggle('active',  type === 'daily');
+    document.getElementById('detail-btn-weekly').classList.toggle('active', type === 'weekly');
+    document.getElementById('detail-target-row').classList.toggle('show', type === 'weekly');
+  };
 
-    // ── Last 8 weeks trend ────────────────────────────────────────────────
-    const TREND_WEEKS = 8;
-    const MAX_BAR_PX  = 90;
-    const trendData   = [];
-    for (let offset = -(TREND_WEEKS - 1); offset <= 0; offset++) {
-      const week       = getWeekDays(offset);
-      const isThisWeek = offset === 0;
-      let done = 0, applicable = 0;
-      data.habits.forEach(h => {
-        const dates   = new Set(h.dates || []);
-        const created = h.createdAt || '1970-01-01';
-        week.forEach(ds => {
-          if (ds > td || ds < created) return;
-          applicable++;
-          if (dates.has(ds)) done++;
-        });
-      });
-      const pct  = applicable > 0 ? Math.round(done / applicable * 100) : null;
-      const mon  = new Date(week[0] + 'T12:00:00');
-      const lbl  = mon.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      const barPx = pct !== null ? Math.max(4, Math.round(pct / 100 * MAX_BAR_PX)) : 4;
-      trendData.push({ pct, lbl, isThisWeek, barPx });
-    }
+  window.changeDetailTarget = function(delta) {
+    detailTarget = Math.max(1, Math.min(7, detailTarget + delta));
+    document.getElementById('detail-target-count').textContent = detailTarget;
+    document.getElementById('detail-minus').disabled = detailTarget <= 1;
+    document.getElementById('detail-plus').disabled  = detailTarget >= 7;
+  };
 
-    const trendHtml = `
-      <div class="trend-bars">
-        ${trendData.map(w => {
-          const cls = w.isThisWeek ? 'this-week' : (w.pct !== null ? 'has-data' : 'no-data');
-          return `<div class="trend-col">
-            ${w.pct !== null ? `<div class="trend-pct">${w.pct}%</div>` : ''}
-            <div class="trend-bar ${cls}" style="height:${w.barPx}px"></div>
-          </div>`;
-        }).join('')}
-      </div>
-      <div class="trend-labels">
-        ${trendData.map(w => `<div class="trend-lbl${w.isThisWeek ? ' this-week' : ''}">${w.lbl}</div>`).join('')}
-      </div>`;
-
-    // ── Per-habit breakdown ────────────────────────────────────────────────
-    const breakdownHtml = data.habits.map(h => {
-      const p       = PALETTE[h.colorIdx ?? 0];
-      const emoji   = h.emoji || getHabitEmoji(h.name);
-      const best    = calcBestStreak(h.dates || []);
-      const cur     = calcStreakByType(h);
-      const unit    = streakUnit(h);
-      const total   = (h.dates || []).length;
-      const created = h.createdAt || td;
-      const daysSince = Math.max(1, Math.round(
-        (new Date(td + 'T12:00:00') - new Date(created + 'T12:00:00')) / 86400000
-      ) + 1);
-      const rate = Math.round(total / daysSince * 100);
-      return `<div class="hb-row" style="background:${p.grad}">
-        <div class="hb-emoji">${emoji}</div>
-        <div class="hb-info">
-          <div class="hb-name">${esc(h.name)}</div>
-          <div class="hb-stats">
-            <span class="hb-stat">🔥 Now <strong>${cur}${unit}</strong></span>
-            <span class="hb-stat">🏆 Best <strong>${best}d</strong></span>
-            <span class="hb-stat">✓ <strong>${total}</strong> total</span>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-
-    el.innerHTML = `
-      <div class="sts-highlights">
-        <div class="sts-card">
-          <div class="sts-icon">🏆</div>
-          <div class="sts-val">${allTimeBest}<span class="sts-val-sup">d</span></div>
-          <div class="sts-lbl">Best Streak Ever</div>
-        </div>
-        <div class="sts-card">
-          <div class="sts-icon">✅</div>
-          <div class="sts-val">${allTimeTotal}</div>
-          <div class="sts-lbl">Total Completions</div>
-        </div>
-        <div class="sts-card">
-          <div class="sts-icon">🎯</div>
-          <div class="sts-val">${mostConsistentRate}<span class="sts-val-sup">%</span></div>
-          <div class="sts-sub">${mcEmoji} ${esc(mostConsistentHabit?.name || '')}</div>
-          <div class="sts-lbl">Most Consistent</div>
-        </div>
-        <div class="sts-card">
-          <div class="sts-icon">📅</div>
-          <div class="sts-val">${activeDays}</div>
-          <div class="sts-lbl">Active Days</div>
-        </div>
-      </div>
-
-      <p class="sts-section-title">Completion — Last 8 Weeks</p>
-      <div class="trend-chart">${trendHtml}</div>
-
-      <p class="sts-section-title">Habit Breakdown</p>
-      <div class="habit-breakdown">${breakdownHtml}</div>
-    `;
-  }
+  window.saveHabitDetail = function() {
+    if (!detailId) return;
+    const data = load();
+    const h = data.habits.find(x => x.id === detailId);
+    if (!h) return;
+    h.type   = detailType;
+    h.target = detailType === 'weekly' ? detailTarget : 1;
+    h.note   = detailNote;
+    save(data);
+    closeHabitDetail();
+    render();
+    showToast('Saved ✓');
+  };
 
   render();
 </script>
