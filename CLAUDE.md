@@ -33,10 +33,10 @@ Every session should keep these 3 files up to date:
 
 ## Projects in this directory
 
-| Project | Type | Entry point |
-|---|---|---|
-| `habit-tracker.html` | Single-file HTML/CSS/JS app | Open directly in browser |
-| `MyApp/` | Expo React Native app | `npx expo start` inside `MyApp/` |
+| Project              | Type                        | Entry point                      |
+| -------------------- | --------------------------- | -------------------------------- |
+| `habit-tracker.html` | Single-file HTML/CSS/JS app | Open directly in browser         |
+
 
 ---
 
@@ -59,32 +59,35 @@ Persisted to `localStorage` under key `'ht_v1'`:
     createdAt: string,   // "YYYY-MM-DD"
     colorIdx: number,    // index into PALETTE (0–7)
     emoji: string,       // may be absent; falls back to getHabitEmoji(name)
-    type: string,        // 'daily' | 'weekly' | 'monthly' (default: 'daily')
-    target: number       // completion target per period (default 1; daily ignores it)
+    type: string,        // 'daily' | 'weekly' (default: 'daily') — monthly removed
+    target: number,      // completion target per period (default 1; daily ignores it)
+    note: string         // personal "why" note (default '')
   }]
 }
 ```
 
-Migration in `load()` backfills missing `colorIdx`, `dates`, `type`, and `target` fields automatically.
+Migration in `load()` backfills missing `colorIdx`, `dates`, `type`, `target`, and `note` fields automatically. Also converts any legacy `'monthly'` type → `'daily'`.
 
 ### Architecture
 
 All state lives in module-level JS variables; `render()` is a single function that rebuilds the entire UI on every state change.
 
 Key state variables:
-- `currentView` — `'home' | 'weekly' | 'calendar' | 'stats'`
+- `currentView` — `'home' | 'weekly' | 'calendar'`
 - `wkOffset` — week navigation offset (0 = current week, -1 = last, etc.)
 - `vYear`, `vMonth` — calendar tab month being viewed
 - `selectedCalHabit` — habit ID selected in the calendar tab
 - `pendingEmoji`, `pickerTarget` — emoji picker state (`pickerTarget` is `'add'` or a habit ID)
-- `pendingType` — type selected in the add-form type picker (`'daily'` | `'weekly'` | `'monthly'`)
+- `pendingType` — type selected in the add-form type picker (`'daily'` | `'weekly'`)
 - `pendingTarget` — target count for the habit being added (default 1; reset after add)
 - `expandedHabits` — `Set<id>` of habit cards with inline calendar expanded
-- `homeFilter` — `'all' | 'daily' | 'weekly' | 'monthly'` — filters home habit list AND sets `pendingType`
+- `homeFilter` — `'all' | 'daily' | 'weekly'` — filters home habit list AND sets `pendingType`
 - `homeWeekOffset` — week nav offset for home week strip (0 = current week, -1 = last week, etc.)
 - `selectedHomeDate` — ISO date string of the day selected in the home week strip (default: today)
 - `targetEditId` — habit ID currently being edited in the target edit bottom sheet
 - `sheetTargetValue` — current stepper value shown in the target edit sheet
+- `detailId` — habit ID currently open in the detail sheet (null when closed)
+- `detailType`, `detailTarget`, `detailNote` — working state for the detail sheet while open
 
 Key helpers:
 - `getWeekDays(weekOffset)` — returns 7 ISO date strings Mon–Sun for a given offset
@@ -92,18 +95,19 @@ Key helpers:
 - `getHabitEmoji(name)` — keyword-based emoji auto-assignment
 - `calcStreak(dates)` — current daily streak (consecutive days ending today/yesterday)
 - `calcStreakWeekly(dates, target)` — consecutive weeks where completions ≥ target; uses `Map<weekStart, count>`
-- `calcStreakMonthly(dates, target)` — consecutive months where completions ≥ target; uses `Map<YYYY-MM, count>`
 - `calcStreakByType(habit)` — dispatches to correct streak fn, passing `habit.target`
-- `streakUnit(habit)` — returns `'d'` / `'w'` / `'m'`
-- `calcBestStreak(dates)` — all-time best consecutive day run
-- `cycleHabitType(id)` — cycles a habit's type Daily→Weekly→Monthly→Daily, saves, re-renders
-- `setHabitType(type)` — sets `homeFilter` + `pendingType`, resets `pendingTarget`, shows/hides target picker row, re-renders
-- `updateTargetPickerRow()` — shows/hides target picker row and updates its label/button states
-- `changePendingTarget(delta)` — +/− for pending target in add form
+- `streakUnit(habit)` — returns `'d'` or `'w'`
+- `cycleHabitType(id)` — cycles Daily→Weekly→Daily, saves, re-renders
+- `setHabitType(type)` — sets `homeFilter` + `pendingType`, re-renders
 - `showTargetSheet(id)` — opens target edit bottom sheet for an existing habit
 - `closeTargetSheet()` — closes target edit sheet
 - `changeSheetTarget(delta)` — +/− buttons inside target edit sheet
 - `saveTargetEdit()` — saves sheet target value to habit, closes sheet, shows toast
+- `showHabitDetail(id)` — opens detail sheet; populates type, target, note fields
+- `closeHabitDetail()` — closes detail sheet
+- `setDetailType(type)` — toggles Daily/Weekly in detail sheet, shows/hides target row
+- `changeDetailTarget(delta)` — +/− target stepper in detail sheet (1–7)
+- `saveHabitDetail()` — saves type, target, note from detail sheet; shows "Saved ✓" toast
 - `changeHomeWeek(dir)` — navigates home week strip by ±1 week, updates `selectedHomeDate`
 - `initWeekStripSwipe()` — attaches swipe (touch + mouse) listeners to week strip for week navigation
 - `selectHomeDay(ds)` — sets `selectedHomeDate`, re-renders
@@ -111,19 +115,19 @@ Key helpers:
 
 ### Views
 
-**Home** — Week strip (Mon–Sun dots) at top; tap any past/today dot to select it (purple follows selected day; today shows dark purple when not selected = light purple tint). Swipe left/right on strip to navigate weeks (`homeWeekOffset`). Filter/type row (All / ☀️ Daily / 📅 Weekly / 🗓 Monthly) filters the list AND sets `pendingType` for new habits. Target picker row appears below filter row for Weekly/Monthly. Habit cards grouped into labelled sections by type (or flat list when a type filter is active). Each card has: emoji (tap to change), name, streak badge (d/w/m unit), type chip (tap to cycle type), target chip (N× — weekly/monthly only, tap to open target sheet), complete button (targets `selectedHomeDate`), calendar toggle, delete. Long-press to drag-reorder (SortableJS).
+**Home** — Week strip (Mon–Sun dots) at top; tap any past/today dot to select it. Swipe left/right to navigate weeks. Filter/type row (All / ☀️ Daily / 📅 Weekly) filters list and sets `pendingType`. Habit cards grouped into Daily / Weekly sections (or flat when filtered). Each card has: emoji (tap to change), **name (tap to open detail sheet)**, streak badge (d/w unit), type chip (tap to cycle), target chip (N× — weekly only, tap to open target sheet), complete button, calendar toggle, delete. Long-press to drag-reorder (SortableJS).
 
-**Weekly** — 7-column habit×day grid (`wk-sq` cells), week nav, 4 summary stats. Rest days (weekly/monthly completions ≥ target in that period) show as `.wk-sq.rest` (neutral) instead of missed (red). `weekMet`/`monMet` now use count ≥ `habit.target` logic.
+**Weekly** — 7-column habit×day grid (`wk-sq` cells), week nav, 4 summary stats. Rest days (weekly completions ≥ target) show as `.wk-sq.rest` (neutral) instead of missed (red).
 
-**Calendar** — top emoji bubble picker selects active habit; single shared calendar grid. Day cells are type-aware: for weekly/monthly habits, days in a period where completions ≥ target show as `.day-cell.rest` (neutral) not red. Month summary chips adapt to daily/weekly/monthly logic; monthly chips show `N/target done` or `N/target so far…`.
+**Calendar** — top emoji bubble picker selects active habit; single shared calendar grid. Day cells are type-aware: for weekly habits, days in a week where completions ≥ target show as `.day-cell.rest` (neutral) not red. Month summary chips adapt to daily/weekly logic.
 
-**Stats** — 4 headline cards (2×2), Last 8 Weeks bar chart, per-habit breakdown with correct streak units.
+**Habit Detail Sheet** — slides up when habit name is tapped. Contains: type toggle (Daily/Weekly), target stepper (weekly only, 1–7×/week), "Why this habit?" textarea. Save button commits all three fields at once.
 
 ### Styling conventions
 
 - Per-habit color: set `--accent` on a parent container; child elements reference `var(--accent, <fallback>)`.
 - Missed days: solid red `#ef4444` — must NOT inherit from `--accent`.
-- Rest days (weekly/monthly period met): `background: rgba(0,0,0,0.04)` — neutral grey.
+- Rest days (weekly period met): `background: rgba(0,0,0,0.04)` — neutral grey.
 - Done days: solid `var(--accent)`.
 - Mobile-first sizing: fixed widths/heights (e.g. `26px` weekly squares) or `width: min(40px, 100%); aspect-ratio: 1` for calendar day cells.
 

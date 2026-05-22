@@ -39,18 +39,34 @@ Lessons learned, key decisions, and things to remember for future sessions.
   if (h.newField === undefined) { h.newField = defaultValue; dirty = true; }
   ```
 - **Why:** Existing localStorage data won't have the new field. Without migration, old habits silently break.
-- **Fields migrated so far:** `completedDates` → `dates`, `colorIdx`, `type`, `target`.
+- **Fields migrated so far:** `completedDates` → `dates`, `colorIdx`, `type`, `target`, `note`.
 
 ### Reuse the bottom sheet pattern for new UI
 - **Decision:** All modal/overlay interactions use the same bottom sheet pattern (`ep-sheet` style).
-- **Elements so far:** `#ep-sheet` (emoji picker), `#settings-sheet` (data management), `#target-sheet` (target edit).
+- **Elements so far:** `#ep-sheet` (emoji picker), `#settings-sheet` (data management), `#target-sheet` (target edit), `#detail-sheet` (habit detail).
 - **Pattern:** sheet element + overlay element + `show` class toggle + close on overlay tap.
 
-### Use `Map<period, count>` not `Set<period>` for weekly/monthly logic
-- **Decision:** When checking if a weekly/monthly period is "done", count completions and compare to target — don't just check presence.
+### Use `Map<period, count>` not `Set<period>` for weekly logic
+- **Decision:** When checking if a weekly period is "done", count completions and compare to target — don't just check presence.
 - **Before:** `Set<weekStart>` — any completion = done.
 - **After:** `Map<weekStart, count>` — `count >= target` = done.
-- **Applies to:** `calcStreakWeekly`, `calcStreakMonthly`, `calGridHtml` rest-day logic, weekly grid `weekMet`/`monMet`.
+- **Applies to:** `calcStreakWeekly`, `calGridHtml` rest-day logic, weekly grid `weekMet`.
+
+### Monthly habit type removed
+- **Decision:** Removed `'monthly'` type entirely. Only `'daily'` and `'weekly'` remain.
+- **Why:** User doesn't track habits on a monthly basis — the type added complexity without value.
+- **Migration:** Any existing `'monthly'` habits are auto-converted to `'daily'` in `load()`.
+- **Removed:** `calcStreakMonthly`, monthly calendar logic, monthly filter tab, monthly CSS.
+
+### Stats tab removed
+- **Decision:** Stats tab (`currentView === 'stats'`) removed entirely.
+- **Why:** User felt the data wasn't meaningful after habit types were split into daily/weekly.
+- **Removed:** `renderStatsView`, `calcBestStreak`, all `.sts-*`, `.trend-*`, `.hb-*` CSS, nav button.
+
+### Habit detail sheet — single place to edit type, target, note
+- **Decision:** Tapping a habit's name opens a detail bottom sheet with type toggle, target stepper, and "why" note.
+- **Why:** Consolidates settings into one place rather than scattered chips/sheets on the card.
+- **Tap zone:** Only the habit name `<div>` is the trigger — existing buttons (emoji, complete, delete, chips) are unaffected. Used `event.stopPropagation()` to prevent card-level conflicts.
 
 ### CSS specificity — source order matters for equal-specificity selectors
 - **Bug:** `.ws-dot.selected` was defined before `.ws-dot.past` in the stylesheet. Both have the same specificity (two classes). `.ws-dot.past` (later in file) overrode `.ws-dot.selected` for past days, so the selected purple dot never appeared on past dates.
@@ -64,7 +80,7 @@ Lessons learned, key decisions, and things to remember for future sessions.
 - **Note:** Weekly tab still uses `‹ ›` buttons — different context, different treatment is fine.
 
 ### Filter tabs are dual-purpose
-- **Decision:** The All / Daily / Weekly / Monthly filter row on home does two things: (1) filters the visible habit list, and (2) sets `pendingType` for the next habit to be added.
+- **Decision:** The All / Daily / Weekly filter row on home does two things: (1) filters the visible habit list, and (2) sets `pendingType` for the next habit to be added.
 - **Why:** Reduces UI complexity — one row does both jobs. If you're looking at weekly habits, you probably want to add a weekly one.
 - **Edge case:** "All" filter keeps whatever `pendingType` was last set; it doesn't reset it.
 
@@ -104,3 +120,5 @@ Lessons learned, key decisions, and things to remember for future sessions.
 - **`isPerfect()` is defined but unused.** The PRF badge was removed. Don't accidentally reference it.
 - **Calendar week starts Sunday, but week strip and weekly tab are Mon–Sun.** `CAL_LABELS = ['Su','Mo','Tu','We','Th','Fr','Sa']`. Don't "fix" this — it's intentional for the calendar grid layout.
 - **`target` field is ignored for daily habits.** Don't add target UI to daily habit cards. The data field exists (defaulting to 1) but daily logic never reads it.
+- **`note` field is set via the detail sheet only.** It is not shown on the habit card itself. Don't add it to the card render.
+- **localStorage data is browser-specific.** Always open in Safari — data saved in Safari won't appear in Chrome and vice versa.
