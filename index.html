@@ -1315,6 +1315,24 @@
     .detail-target-row.show {
       display: flex;
     }
+    .detail-name-input {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 14px;
+      border: 1.5px solid rgba(124,58,237,0.15);
+      background: rgba(255,255,255,0.8);
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e1b4b;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .detail-name-input:focus {
+      border-color: rgba(124,58,237,0.45);
+    }
+    .detail-name-input::placeholder { color: rgba(30,27,75,0.3); }
     .detail-note-area {
       width: 100%;
       box-sizing: border-box;
@@ -1437,6 +1455,9 @@
     <div class="detail-header-title" id="detail-title"></div>
     <button class="detail-close-btn" onclick="closeHabitDetail()">✕</button>
   </div>
+
+  <div class="detail-section-label">Name</div>
+  <input id="detail-name" class="detail-name-input" type="text" placeholder="Habit name" oninput="detailName = this.value">
 
   <div class="detail-section-label">Frequency</div>
   <div class="detail-type-row">
@@ -1562,6 +1583,7 @@
   let homeFilter        = 'all';   // 'all' | 'daily' | 'weekly'
   let pickerTarget      = null; // 'add' or habitId
   let detailId          = null;
+  let detailName        = '';
   let detailType        = 'daily';
   let detailTarget      = 1;
   let detailNote        = '';
@@ -2476,6 +2498,7 @@
     const h = data.habits.find(x => x.id === id);
     if (!h) return;
     detailId     = id;
+    detailName   = h.name;
     detailType   = h.type || 'daily';
     detailTarget = h.target || 1;
     detailNote   = h.note  || '';
@@ -2483,6 +2506,7 @@
     const emoji = h.emoji || getHabitEmoji(h.name);
     document.getElementById('detail-title').textContent = `${emoji} ${h.name}`;
 
+    document.getElementById('detail-name').value = detailName;
     document.getElementById('detail-btn-daily').classList.toggle('active',  detailType === 'daily');
     document.getElementById('detail-btn-weekly').classList.toggle('active', detailType === 'weekly');
 
@@ -2520,9 +2544,16 @@
 
   window.saveHabitDetail = function() {
     if (!detailId) return;
+    const trimmed = detailName.trim();
+    if (!trimmed) {
+      document.getElementById('detail-name').focus();
+      showToast('Name cannot be empty');
+      return;
+    }
     const data = load();
     const h = data.habits.find(x => x.id === detailId);
     if (!h) return;
+    h.name   = trimmed;
     h.type   = detailType;
     h.target = detailType === 'weekly' ? detailTarget : 1;
     h.note   = detailNote;
