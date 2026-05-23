@@ -35,16 +35,17 @@ Every session should keep these 3 files up to date:
 
 | Project              | Type                        | Entry point                      |
 | -------------------- | --------------------------- | -------------------------------- |
-| `habit-tracker.html` | Single-file HTML/CSS/JS app | Open directly in browser         |
+| `index.html`         | Single-file HTML/CSS/JS app | Open directly in browser or via GitHub Pages |
 
 
 ---
 
-## habit-tracker.html
+## index.html (formerly habit-tracker.html)
 
 A zero-dependency habit tracker — all HTML, CSS, and JavaScript in one file. No build step.
 
-**To develop:** open the file in a browser and reload after edits.
+**To develop:** open `index.html` in a browser and reload after edits.
+**Deployed at:** https://rachelhfteoh.github.io/habit-tracker/
 
 ### Data model
 
