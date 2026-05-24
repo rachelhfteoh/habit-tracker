@@ -209,37 +209,40 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .habit-header {
+    .card-body {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 0;
+      gap: 12px;
     }
 
-    /* emoji icon */
-    .habit-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 13px;
-      background: rgba(255,255,255,0.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 21px;
-      flex-shrink: 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .habit-name {
+    .card-left {
       flex: 1;
       min-width: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .card-emoji {
+      font-size: 24px;
+      flex-shrink: 0;
+      line-height: 1.3;
+    }
+
+    .card-name {
       font-size: 15px;
       font-weight: 700;
       color: #1e1b4b;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       letter-spacing: -0.1px;
+      line-height: 1.4;
+    }
+
+    .card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      flex-shrink: 0;
     }
 
     .streak-badge {
@@ -259,93 +262,6 @@
     .streak-badge.hot  { color: #c2410c; }
     .streak-badge.cold { color: #9ca3af; }
 
-    .delete-btn {
-      background: rgba(255,255,255,0.65);
-      border: none;
-      color: #9ca3af;
-      cursor: pointer;
-      font-size: 18px;
-      line-height: 1;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: color 0.12s, background 0.12s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-    }
-
-    .delete-btn:hover { color: #ef4444; background: white; }
-
-    /* ── Calendar toggle button ── */
-    .cal-toggle-btn {
-      background: rgba(255,255,255,0.65);
-      border: none;
-      cursor: pointer;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(0,0,0,0.35);
-      flex-shrink: 0;
-      transition: color 0.12s, background 0.12s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-    }
-
-    .cal-toggle-btn svg {
-      width: 14px;
-      height: 14px;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      fill: none;
-    }
-
-    .cal-toggle-btn:hover, .cal-toggle-btn.active { color: #6366f1; background: white; }
-
-    /* ── Inline expanded calendar ── */
-    .habit-cal-expand {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1.5px solid rgba(255,255,255,0.55);
-    }
-
-    .inline-month-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .inline-month-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: rgba(30,27,75,0.7);
-    }
-
-    .inline-nav-btn {
-      background: rgba(255,255,255,0.65);
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      color: rgba(30,27,75,0.5);
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.12s, color 0.12s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-    }
-
-    .inline-nav-btn:hover:not(:disabled) { background: white; color: #1e1b4b; }
-    .inline-nav-btn:disabled { opacity: 0.25; cursor: default; }
 
     /* ── Week strip ── */
     .week-strip {
@@ -741,8 +657,6 @@
     .ep-btn:active { transform: scale(0.82); }
     .ep-btn.current { background: #ede9fe; }
 
-    .habit-icon.editable { cursor: pointer; transition: filter 0.12s; }
-    .habit-icon.editable:hover { filter: brightness(0.88); }
 
     /* ══ WEEKLY VIEW ══ */
     .wk-nav {
@@ -1196,23 +1110,6 @@
     }
     .target-save-btn:active { transform: scale(0.98); }
 
-    /* ── Type chip on habit card ── */
-    .type-chip {
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.6);
-      color: rgba(30,27,75,0.45);
-      cursor: pointer;
-      flex-shrink: 0;
-      border: none;
-      font-family: inherit;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      transition: background 0.12s, color 0.12s;
-    }
-    .type-chip:hover { background: rgba(255,255,255,0.95); color: #7c3aed; }
-    .type-chip:active { transform: scale(0.92); }
 
     /* ── Rest day (weekly target met, day not completed) ── */
     .day-cell.rest        { color: rgba(30,27,75,0.2); background: rgba(0,0,0,0.04); }
@@ -1251,7 +1148,7 @@
 
       /* Habit card */
       .habit-card { padding: 12px 14px; border-radius: 18px; }
-      .habit-name { font-size: 14px; }
+      .card-name { font-size: 14px; }
     }
 
     /* ── Habit detail sheet ── */
@@ -1353,6 +1250,28 @@
       border-color: rgba(124,58,237,0.45);
     }
     .detail-note-area::placeholder { color: rgba(30,27,75,0.3); }
+    .detail-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .detail-actions .target-save-btn {
+      flex: 1;
+    }
+    .detail-delete-btn {
+      flex: 1;
+      padding: 14px 0;
+      border-radius: 14px;
+      border: none;
+      background: #fee2e2;
+      color: #dc2626;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .detail-delete-btn:hover { background: #fecaca; }
   </style>
 </head>
 <body>
@@ -1477,10 +1396,13 @@
     </div>
   </div>
 
-  <div class="detail-section-label">Why this habit?</div>
+  <div class="detail-section-label">Why is this habit important to me?</div>
   <textarea id="detail-note" class="detail-note-area" placeholder="e.g. I want to build discipline and feel more calm each morning…" oninput="detailNote = this.value"></textarea>
 
-  <button class="target-save-btn" onclick="saveHabitDetail()">Save</button>
+  <div class="detail-actions">
+    <button class="target-save-btn" onclick="saveHabitDetail()">Save</button>
+    <button class="detail-delete-btn" onclick="deleteHabitFromSheet()">Delete</button>
+  </div>
 </div>
 
 <nav class="bottom-nav">
@@ -1574,8 +1496,6 @@
   let vYear  = new Date().getFullYear();
   let vMonth = new Date().getMonth();
 
-  let expandedHabits    = new Set();
-  let habitMonths       = new Map();
   let selectedCalHabit  = null;
   let pendingEmoji      = null;
   let pendingType       = 'daily'; // 'daily' | 'weekly'
@@ -1751,22 +1671,9 @@
   function habitHeaderHtml(habit, isHomeView = false) {
     const s    = calcStreakByType(habit);
     const unit = streakUnit(habit);
-    const expanded = expandedHabits.has(habit.id);
     const emoji = habit.emoji || getHabitEmoji(habit.name);
     const selDate   = isHomeView ? selectedHomeDate : todayStr();
     const doneToday = (habit.dates || []).includes(selDate);
-
-    const calBtn = isHomeView ? `
-      <button class="cal-toggle-btn${expanded ? ' active' : ''}"
-              onclick="event.stopPropagation(); toggleHabitCal('${habit.id}')"
-              title="${expanded ? 'Hide calendar' : 'Show calendar'}">
-        <svg viewBox="0 0 24 24">
-          <rect x="3" y="4" width="18" height="18" rx="2"/>
-          <line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8"  y1="2" x2="8"  y2="6"/>
-          <line x1="3"  y1="10" x2="21" y2="10"/>
-        </svg>
-      </button>` : '';
 
     const completeBtn = isHomeView ? `
       <button class="complete-btn${doneToday ? ' done' : ''}"
@@ -1775,25 +1682,18 @@
         ${doneToday ? '✓' : '+'}
       </button>` : '';
 
-    const iconClick = isHomeView
-      ? `onclick="event.stopPropagation(); toggleEmojiPicker('${habit.id}')" title="Change emoji"`
-      : '';
-    const TYPE_ICONS = { daily: '☀️', weekly: '📅' };
-    const typeIcon   = TYPE_ICONS[habit.type || 'daily'];
-    const typeChip   = isHomeView
-      ? `<button class="type-chip" onclick="event.stopPropagation(); cycleHabitType('${habit.id}')" title="Tap to change frequency">${typeIcon}</button>`
-      : '';
     return `
-      <div class="habit-header">
-        <div class="habit-icon${isHomeView ? ' editable' : ''}" ${iconClick}>${emoji}</div>
-        <div class="habit-name" onclick="event.stopPropagation(); showHabitDetail('${habit.id}')" style="cursor:pointer">${esc(habit.name)}</div>
-        <div class="streak-badge ${s > 0 ? 'hot' : 'cold'}">
-          ${s > 0 ? '🔥' : '○'} ${s}${unit}
+      <div class="card-body">
+        <div class="card-left">
+          <span class="card-emoji">${emoji}</span>
+          <div class="card-name">${esc(habit.name)}</div>
         </div>
-        ${typeChip}
-        ${completeBtn}
-        ${calBtn}
-        <button class="delete-btn" onclick="event.stopPropagation(); removeHabit('${habit.id}')" title="Delete">×</button>
+        <div class="card-right">
+          ${completeBtn}
+          <div class="streak-badge ${s > 0 ? 'hot' : 'cold'}">
+            ${s > 0 ? '🔥' : '○'} ${s}${unit}
+          </div>
+        </div>
       </div>`;
   }
 
@@ -2168,21 +2068,8 @@
       } else {
         const nowY = new Date().getFullYear(), nowM = new Date().getMonth();
         const renderCard = h => {
-          const isExpanded = expandedHabits.has(h.id);
-          const hm = habitMonths.get(h.id) || { year: nowY, month: nowM };
-          const atCurrent = hm.year === nowY && hm.month === nowM;
           const doneToday = (h.dates || []).includes(selectedHomeDate);
-          const expandSection = isExpanded ? `
-            <div class="habit-cal-expand">
-              <div class="inline-month-nav">
-                <button class="inline-nav-btn" onclick="changeHabitMonth('${h.id}',-1)">‹</button>
-                <span class="inline-month-label">${fmtMonth(hm.year, hm.month)}</span>
-                <button class="inline-nav-btn" onclick="changeHabitMonth('${h.id}',1)" ${atCurrent ? 'disabled' : ''}>›</button>
-              </div>
-              ${summaryHtml(h, hm.year, hm.month)}
-              ${calGridHtml(h, hm.year, hm.month)}
-            </div>` : '';
-          return `<div class="habit-card${doneToday ? ' done-today' : ''}" data-id="${h.id}" ${cardStyle(h)}>${habitHeaderHtml(h, true)}${expandSection}</div>`;
+          return `<div class="habit-card${doneToday ? ' done-today' : ''}" data-id="${h.id}" ${cardStyle(h)} onclick="showHabitDetail('${h.id}')">${habitHeaderHtml(h, true)}</div>`;
         };
 
         let listHtml = '';
@@ -2269,31 +2156,6 @@
     render();
   };
 
-  // ── inline calendar toggle ────────────────────────────────────────────────
-  window.toggleHabitCal = function(id) {
-    if (expandedHabits.has(id)) {
-      expandedHabits.delete(id);
-    } else {
-      expandedHabits.add(id);
-      if (!habitMonths.has(id)) {
-        habitMonths.set(id, { year: new Date().getFullYear(), month: new Date().getMonth() });
-      }
-    }
-    render();
-  };
-
-  window.changeHabitMonth = function(id, dir) {
-    const now = new Date();
-    let { year, month } = habitMonths.get(id) || { year: now.getFullYear(), month: now.getMonth() };
-    if (dir === -1) {
-      if (month === 0) { month = 11; year--; } else month--;
-    } else {
-      if (year === now.getFullYear() && month === now.getMonth()) return;
-      if (month === 11) { month = 0; year++; } else month++;
-    }
-    habitMonths.set(id, { year, month });
-    render();
-  };
 
   // ── view switching ────────────────────────────────────────────────────────
   window.setView = function(name) {
@@ -2321,6 +2183,17 @@
 
   window.removeHabit = function(id) {
     if (!confirm('Delete this habit and all its history?')) return;
+    const data = load();
+    data.habits = data.habits.filter(h => h.id !== id);
+    save(data);
+    render();
+  };
+
+  window.deleteHabitFromSheet = function() {
+    if (!detailId) return;
+    if (!confirm('Delete this habit and all its history?')) return;
+    const id = detailId;
+    closeHabitDetail();
     const data = load();
     data.habits = data.habits.filter(h => h.id !== id);
     save(data);
