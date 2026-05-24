@@ -31,13 +31,6 @@
     .view { display: none; }
     .view.active { display: block; }
 
-    #view-weekly {
-      background: linear-gradient(150deg, #f5f0ff 0%, #ede9fe 55%, #e8f4ff 100%);
-      border-radius: 20px;
-      padding: 14px;
-      margin: -4px;
-    }
-
     /* ── Back-to-home button ── */
     .back-home-btn {
       background: rgba(255,255,255,0.75);
@@ -172,9 +165,9 @@
 
     /* ── Habit card ── */
     .habit-card {
-      border-radius: 22px;
-      padding: 14px 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      border-radius: 18px;
+      padding: 10px 14px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.08);
       animation: slide-in 0.25s ease;
       position: relative;
       overflow: hidden;
@@ -212,46 +205,46 @@
     .card-body {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .card-left {
       flex: 1;
       min-width: 0;
       display: flex;
-      align-items: flex-start;
-      gap: 10px;
+      align-items: center;
+      gap: 8px;
     }
 
     .card-emoji {
-      font-size: 24px;
+      font-size: 20px;
       flex-shrink: 0;
-      line-height: 1.3;
+      line-height: 1;
     }
 
     .card-name {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: #1e1b4b;
       letter-spacing: -0.1px;
-      line-height: 1.4;
+      line-height: 1.35;
     }
 
     .card-right {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 7px;
+      gap: 5px;
       flex-shrink: 0;
     }
 
     .streak-badge {
       display: flex;
       align-items: center;
-      gap: 3px;
-      font-size: 12px;
+      gap: 2px;
+      font-size: 11px;
       font-weight: 800;
-      padding: 5px 11px;
+      padding: 3px 8px;
       border-radius: 20px;
       flex-shrink: 0;
       white-space: nowrap;
@@ -332,8 +325,8 @@
 
     /* ── Complete-today button ── */
     .complete-btn {
-      width: 34px;
-      height: 34px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.75);
       background: rgba(255,255,255,0.3);
@@ -341,7 +334,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 800;
       color: rgba(255,255,255,0.75);
       flex-shrink: 0;
@@ -658,132 +651,6 @@
     .ep-btn.current { background: #ede9fe; }
 
 
-    /* ══ WEEKLY VIEW ══ */
-    .wk-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(255,255,255,0.75);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.95);
-      border-radius: 16px;
-      padding: 8px 12px;
-      margin-bottom: 14px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-    .wk-nav-btn {
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      color: #6b7280;
-      padding: 2px 10px;
-      border-radius: 8px;
-      transition: background 0.12s, color 0.12s;
-    }
-    .wk-nav-btn:hover:not(:disabled) { background: rgba(255,255,255,0.8); color: #111827; }
-    .wk-nav-btn:disabled { opacity: 0.25; cursor: default; }
-    .wk-date-label { font-size: 13px; font-weight: 800; color: #374151; letter-spacing: -0.1px; }
-
-    .wk-grid-card {
-      background: transparent;
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .wk-header-row {
-      display: grid;
-      grid-template-columns: 1fr repeat(7, 26px);
-      gap: 2px;
-      padding: 7px 10px 5px;
-      background: rgba(255,255,255,0.5);
-      border-radius: 12px;
-    }
-    .wk-col-hdr {
-      text-align: center;
-      font-size: 10px;
-      font-weight: 800;
-      color: #9ca3af;
-      text-transform: uppercase;
-    }
-    .wk-section-label {
-      grid-column: 1 / -1;
-      font-size: 11px;
-      font-weight: 800;
-      color: rgba(30,27,75,0.35);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      padding: 10px 4px 2px;
-    }
-    .wk-habit-row {
-      display: grid;
-      grid-template-columns: 1fr repeat(7, 26px);
-      gap: 2px;
-      padding: 7px 12px;
-      align-items: center;
-      border-radius: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .wk-habit-row.alt { background: unset; }
-    .wk-habit-info {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 0;
-    }
-    .wk-emoji { font-size: 15px; flex-shrink: 0; line-height: 1; }
-    .wk-name {
-      font-size: 11px;
-      font-weight: 700;
-      color: #374151;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .wk-sq {
-      width: 26px;
-      height: 26px;
-      border-radius: 8px;
-      flex-shrink: 0;
-    }
-    .wk-sq.missed  { background: rgba(0,0,0,0.08); }
-    .wk-sq.future  { background: rgba(0,0,0,0.03); }
-    .wk-sq.today-open { background: rgba(0,0,0,0.06); outline: 2px solid rgba(99,102,241,0.4); }
-    .wk-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    .wk-stat {
-      border-radius: 16px;
-      padding: 13px 6px 11px;
-      text-align: center;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
-    }
-    .wk-stat:nth-child(1) { background: linear-gradient(135deg,#fee2e2,#fca5a5); }
-    .wk-stat:nth-child(2) { background: linear-gradient(135deg,#dbeafe,#93c5fd); }
-    .wk-stat:nth-child(3) { background: linear-gradient(135deg,#d1fae5,#6ee7b7); }
-    .wk-stat:nth-child(4) { background: linear-gradient(135deg,#fef3c7,#fcd34d); }
-    .wk-stat-val {
-      font-size: 24px;
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -0.5px;
-    }
-    .wk-stat-sup { font-size: 13px; font-weight: 700; }
-    .wk-stat-lbl {
-      font-size: 9px;
-      color: rgba(0,0,0,0.4);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-top: 4px;
-    }
 
     /* ── Pop animation ── */
     @keyframes pop {
@@ -1114,8 +981,6 @@
     /* ── Rest day (weekly target met, day not completed) ── */
     .day-cell.rest        { color: rgba(30,27,75,0.2); background: rgba(0,0,0,0.04); }
     .day-cell.rest:hover  { background: rgba(0,0,0,0.07); }
-    .wk-sq.rest           { background: rgba(0,0,0,0.04); }
-
     /* ── Mobile layout ── */
     @media (max-width: 480px) {
       .app { padding: 14px 12px 90px; }
@@ -1137,18 +1002,12 @@
       .picker-item { width: 46px; height: 46px; border-radius: 14px; }
       .picker-emoji { font-size: 20px; }
 
-      /* Weekly view */
-      #view-weekly { padding: 10px; border-radius: 16px; }
-      .wk-habit-row { padding: 6px 8px; }
-      .wk-name { font-size: 10px; }
-
       /* Stats */
-      .wk-stat-val { font-size: 20px; }
       .stat-value  { font-size: 18px; }
 
       /* Habit card */
-      .habit-card { padding: 12px 14px; border-radius: 18px; }
-      .card-name { font-size: 14px; }
+      .habit-card { padding: 9px 12px; border-radius: 16px; }
+      .card-name { font-size: 13px; }
     }
 
     /* ── Habit detail sheet ── */
@@ -1328,24 +1187,6 @@
   </div>
 
   <!-- ══ WEEKLY VIEW ══ -->
-  <div id="view-weekly" class="view">
-
-    <div class="page-header">
-      <button class="back-home-btn" onclick="setView('home')" title="Back to Home">🏠</button>
-      <h1>Weekly</h1>
-    </div>
-
-    <div class="wk-nav">
-      <button class="wk-nav-btn" id="wk-prev-btn">‹</button>
-      <span class="wk-date-label" id="wk-label"></span>
-      <button class="wk-nav-btn" id="wk-next-btn">›</button>
-    </div>
-
-    <div id="weekly-grid"></div>
-    <div id="weekly-stats"></div>
-
-  </div>
-
   <!-- ══ CALENDAR VIEW ══ -->
   <div id="view-calendar" class="view">
 
@@ -1412,16 +1253,6 @@
       <polyline points="9 21 9 13 15 13 15 21"/>
     </svg>
     Home
-  </button>
-  <button class="nav-btn" id="nav-weekly" onclick="setView('weekly')">
-    <svg viewBox="0 0 24 24">
-      <rect x="3" y="3" width="18" height="18" rx="2"/>
-      <line x1="3" y1="9"  x2="21" y2="9"/>
-      <line x1="3" y1="15" x2="21" y2="15"/>
-      <line x1="9" y1="9"  x2="9"  y2="21"/>
-      <line x1="15" y1="9" x2="15" y2="21"/>
-    </svg>
-    Weekly
   </button>
   <button class="nav-btn" id="nav-calendar" onclick="setView('calendar')">
     <svg viewBox="0 0 24 24">
@@ -1507,7 +1338,6 @@
   let detailType        = 'daily';
   let detailTarget      = 1;
   let detailNote        = '';
-  let wkOffset          = 0;   // 0 = current week, -1 = last week, etc. (weekly tab)
   let homeWeekOffset    = 0;   // week nav on home strip (0 = current week)
   let selectedHomeDate  = todayStr(); // day selected in home week strip
 
@@ -1944,96 +1774,7 @@
     const td    = todayStr();
     const total = data.habits.length;
 
-    if (currentView === 'weekly') {
-
-      const week = getWeekDays(wkOffset);
-      const WK   = ['M','T','W','T','F','S','S'];
-      document.getElementById('wk-label').textContent    = fmtWeekRange(week);
-      document.getElementById('wk-next-btn').disabled    = wkOffset >= 0;
-
-      const gridEl  = document.getElementById('weekly-grid');
-      const statsEl = document.getElementById('weekly-stats');
-
-      if (!total) {
-        gridEl.innerHTML  = `<div class="empty"><div class="empty-icon">📊</div><p>No habits yet — add one from Home.</p></div>`;
-        statsEl.innerHTML = '';
-      } else {
-        // Grid
-        const renderWkRow = h => {
-          const p       = PALETTE[h.colorIdx ?? 0];
-          const emoji   = h.emoji || getHabitEmoji(h.name);
-          const dates   = new Set(h.dates || []);
-          const created = h.createdAt || '1970-01-01';
-          const htype   = h.type || 'daily';
-          const htarget = h.target || 1;
-          const weekMet = htype === 'weekly' && week.filter(ds => dates.has(ds)).length >= htarget;
-          const squares = week.map(ds => {
-            if (ds > td)       return `<div class="wk-sq future"></div>`;
-            if (dates.has(ds)) return `<div class="wk-sq done" style="background:${p.accent}"></div>`;
-            if (ds < created)  return `<div class="wk-sq future"></div>`;
-            if (ds === td)               return `<div class="wk-sq today-open"></div>`;
-            if (weekMet)                 return `<div class="wk-sq rest"></div>`;
-            return `<div class="wk-sq missed"></div>`;
-          }).join('');
-          return `<div class="wk-habit-row" style="background:${p.grad}">
-            <div class="wk-habit-info">
-              <span class="wk-emoji">${emoji}</span>
-              <span class="wk-name">${esc(h.name)}</span>
-            </div>
-            ${squares}
-          </div>`;
-        };
-        const dailyHabits  = data.habits.filter(h => (h.type || 'daily') === 'daily');
-        const weeklyHabits = data.habits.filter(h => h.type === 'weekly');
-        let rows = '';
-        if (dailyHabits.length)  rows += `<div class="wk-section-label">☀️ Daily</div>` + dailyHabits.map(renderWkRow).join('');
-        if (weeklyHabits.length) rows += `<div class="wk-section-label">📅 Weekly</div>` + weeklyHabits.map(renderWkRow).join('');
-
-        gridEl.innerHTML = `<div class="wk-grid-card">
-          <div class="wk-header-row">
-            <div></div>
-            ${WK.map(d => `<div class="wk-col-hdr">${d}</div>`).join('')}
-          </div>
-          ${rows}
-        </div>`;
-
-        // Stats
-        let totalDone = 0, totalApplicable = 0;
-        const dayDone = [0,0,0,0,0,0,0];
-        data.habits.forEach(h => {
-          const created = h.createdAt || '1970-01-01';
-          const dates   = new Set(h.dates || []);
-          week.forEach((ds, i) => {
-            if (ds > td || ds < created) return;
-            totalApplicable++;
-            if (dates.has(ds)) { totalDone++; dayDone[i]++; }
-          });
-        });
-        const pct          = totalApplicable > 0 ? Math.round(totalDone / totalApplicable * 100) : 0;
-        const bestDayCount = Math.max(0, ...dayDone);
-        const bestStreak   = Math.max(0, ...data.habits.map(h => calcStreak(h.dates)));
-
-        statsEl.innerHTML = `<div class="wk-stats">
-          <div class="wk-stat">
-            <div class="wk-stat-val" style="color:#ef4444">${pct}<span class="wk-stat-sup">%</span></div>
-            <div class="wk-stat-lbl">Met</div>
-          </div>
-          <div class="wk-stat">
-            <div class="wk-stat-val" style="color:#3b82f6">${bestDayCount}<span class="wk-stat-sup">✓</span></div>
-            <div class="wk-stat-lbl">Best Day</div>
-          </div>
-          <div class="wk-stat">
-            <div class="wk-stat-val" style="color:#10b981">${totalDone}</div>
-            <div class="wk-stat-lbl">Total Done</div>
-          </div>
-          <div class="wk-stat">
-            <div class="wk-stat-val" style="color:#f59e0b">${bestStreak}<span class="wk-stat-sup">d</span></div>
-            <div class="wk-stat-lbl">Best Streak</div>
-          </div>
-        </div>`;
-      }
-
-    } else if (currentView === 'home') {
+    if (currentView === 'home') {
 
       document.getElementById('home-date').textContent = fmtLong(td);
       renderWeekStrip();
@@ -2235,17 +1976,6 @@
     const nowY = new Date().getFullYear(), nowM = new Date().getMonth();
     if (vYear === nowY && vMonth === nowM) return;
     if (vMonth === 11) { vMonth = 0; vYear++; } else vMonth++;
-    render();
-  });
-
-  document.getElementById('wk-prev-btn').addEventListener('click', () => {
-    wkOffset--;
-    render();
-  });
-
-  document.getElementById('wk-next-btn').addEventListener('click', () => {
-    if (wkOffset >= 0) return;
-    wkOffset++;
     render();
   });
 
