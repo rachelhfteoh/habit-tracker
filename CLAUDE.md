@@ -109,9 +109,9 @@ Key helpers:
 
 ### Views
 
-**Home** — Week strip (Mon–Sun dots) at top; tap any past/today dot to select it. Swipe left/right to navigate weeks. Filter/type row (All / ☀️ Daily / 📅 Weekly) filters list and sets `pendingType`. Habit cards grouped into Daily / Weekly sections (or flat when filtered). Each card: two-column layout — left (emoji + name, wraps freely), right (complete button on top, streak badge below). Tap anywhere on card (except complete button) opens detail sheet. Long-press to drag-reorder (SortableJS).
+**Home** — Week strip (Mon–Sun dots) at top with ‹ › tap buttons for week navigation; swipe right = previous week, swipe left = next week. Tap any past/today dot to select it. Filter/type row (All / ☀️ Daily / 📅 Weekly) filters list and sets `pendingType`. Habit cards grouped into Daily / Weekly sections (or flat when filtered). Each card: two-column layout — left (emoji + name, wraps freely), right (streak badge + complete button in a row). Tap anywhere on card (except complete button) opens detail sheet. Long-press to drag-reorder (SortableJS).
 
-**Calendar** — top emoji bubble picker selects active habit; single shared calendar grid. Day cells are type-aware: for weekly habits, days in a week where completions ≥ target show as `.day-cell.rest` (neutral) not red. Month summary chips adapt to daily/weekly logic.
+**Calendar** — habit picker grouped into Daily and Weekly sections with labels. Tapping any past day (including pre-creation dates) toggles completion via `toggleDate`. Day cells are type-aware: for weekly habits, days in a week where completions ≥ target show as `.day-cell.rest`. All day number text is `#1e1b4b` (black) — no grey-out. Month summary chips adapt to daily/weekly logic.
 
 **Habit Detail Sheet** — slides up when card is tapped. Contains: name input (editable, validated non-empty), type toggle (Daily/Weekly), target stepper (weekly only, 1–7×/week), "Why is this habit important to me?" textarea. Save + Delete buttons at bottom. Delete closes sheet first, then confirms before deleting.
 
@@ -122,8 +122,12 @@ Key helpers:
 - Rest days (weekly period met): `background: rgba(0,0,0,0.04)` — neutral grey.
 - Done days: solid `var(--accent)`.
 - Mobile-first sizing: `width: min(40px, 100%); aspect-ratio: 1` for calendar day cells.
-- Card layout: `.card-body` (flex row) → `.card-left` (emoji + name, wraps) + `.card-right` (complete btn + streak, stacked column).
-- PWA: `viewport-fit=cover` + `apple-mobile-web-app-capable` + `apple-mobile-web-app-status-bar-style: black-translucent`. Nav uses `env(safe-area-inset-bottom)`. App padding-bottom uses `calc(96px + env(safe-area-inset-bottom, 0px))`.
+- Card layout: `.card-body` (flex row) → `.card-left` (emoji + name, wraps) + `.card-right` (streak badge + complete btn, in a row).
+- Complete button: 22×22px circle. Uses `ontouchstart="event.stopPropagation()"` AND `onclick` stopPropagation to prevent card tap opening detail sheet on mobile.
+- Calendar day cells: base `color: #1e1b4b` set on `.day-cell`. Only `.done` and `.missed` override to white (solid coloured backgrounds). Never use rgba grey for day numbers.
+- Streak resets annually: `calcStreak` and `calcStreakWeekly` both stop counting at `${year}-01-01`. Max streak = 365 per year.
+- PWA: `viewport-fit=cover` + `apple-mobile-web-app-capable` + `apple-mobile-web-app-status-bar-style: black-translucent`. App padding uses `calc(Xpx + env(safe-area-inset-top, 0px))` top AND `calc(Xpx + env(safe-area-inset-bottom, 0px))` bottom — both must use env() or content overlaps status bar.
+- Touch icon: `apple-touch-icon-v2.png` (180×180, black bg + purple circle + white tick). Rename file to bust iOS icon cache when updating.
 
 ---
 

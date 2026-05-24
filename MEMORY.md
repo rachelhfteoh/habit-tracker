@@ -160,3 +160,38 @@ Lessons learned, key decisions, and things to remember for future sessions.
 - **Decision:** Renamed `habit-tracker.html` → `index.html` so the URL is clean: `https://rachelhfteoh.github.io/habit-tracker/`.
 - **Why:** GitHub Pages serves `index.html` as the default — no filename needed in the URL, cleaner for iPhone home screen.
 - **PWA setup:** `viewport-fit=cover` is required for `env(safe-area-inset-bottom)` to work in standalone mode. Without it, the safe area inset returns 0 even on iPhone X+.
+
+---
+
+## Technical Decisions (this session)
+
+### Mobile touch — stopPropagation on both click AND touchstart
+- **Bug:** Tapping the complete button on a card was also opening the detail sheet on iPhone.
+- **Cause:** `event.stopPropagation()` on `onclick` doesn't stop touch events. On mobile, `touchstart` fires before `click` and bubbles to the card's onclick handler.
+- **Fix:** Add `ontouchstart="event.stopPropagation()"` to the complete button as well. Both handlers needed.
+
+### Week strip swipe direction was backwards
+- **Bug:** Swiping right on the week strip did nothing (tried to go forward, capped at 0). User expected right swipe = go back to previous week.
+- **Fix:** Swapped the direction: `dx > 0` (swipe right) now calls `changeHomeWeek(-1)` (previous week). Also added ‹ › tap buttons as a reliable alternative to swiping.
+
+### PWA status bar overlap — top safe area inset missing
+- **Bug:** When opened from iPhone home screen, content overlapped the status bar (time/battery).
+- **Cause:** `.app` padding only had `env(safe-area-inset-bottom)` — the top was a flat `20px`.
+- **Fix:** Change to `calc(20px + env(safe-area-inset-top, 0px))` for top padding. Both the base rule AND the `@media (max-width: 480px)` override needed updating.
+
+### iOS touch icon cache — rename file to force refresh
+- **Pattern:** When updating `apple-touch-icon.png`, iOS aggressively caches the old icon. Simply replacing the file doesn't work.
+- **Fix:** Rename the file (e.g. `apple-touch-icon-v2.png`) and update the `<link>` tag. Also tell user to: delete old shortcut → clear Safari cache → re-add to home screen.
+
+### Yearly streak reset
+- **Decision:** Streaks cap at 365 and reset to 0 on January 1 each year.
+- **Why:** Rachel found showing 680 days after 2 years abstract and unmotivating. A yearly reset keeps the number meaningful and achievable.
+- **Implementation:** Both `calcStreak` and `calcStreakWeekly` stop counting backward when they reach `${currentYear}-01-01`.
+
+### Calendar picker grouped by type
+- **Decision:** Habit picker in calendar tab split into "Daily" and "Weekly" sections with label headings.
+- **Trade-off:** Takes more vertical space on mobile — offset by reducing picker bubble size (40px on mobile), tightening padding on picker, info bar, and legend in the `@media (max-width: 480px)` block.
+
+### Calendar pre-creation days now clickable
+- **Decision:** Days before a habit's `createdAt` date (`.day-cell.pre`) are now clickable and can be toggled.
+- **Why:** Home screen has no such restriction — users can mark any past date there. Calendar should be consistent. Use case: retroactively logging a habit they started tracking before adding it to the app.
