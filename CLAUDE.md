@@ -74,19 +74,17 @@ Migration in `load()` backfills missing `colorIdx`, `dates`, `type`, `target`, a
 All state lives in module-level JS variables; `render()` is a single function that rebuilds the entire UI on every state change.
 
 Key state variables:
-- `currentView` — `'home' | 'weekly' | 'calendar'`
-- `wkOffset` — week navigation offset (0 = current week, -1 = last, etc.)
+- `currentView` — `'home' | 'calendar'`
 - `vYear`, `vMonth` — calendar tab month being viewed
 - `selectedCalHabit` — habit ID selected in the calendar tab
 - `pendingEmoji`, `pickerTarget` — emoji picker state (`pickerTarget` is `'add'` or a habit ID)
 - `pendingType` — type selected in the add-form type picker (`'daily'` | `'weekly'`)
 - `pendingTarget` — target count for the habit being added (default 1; reset after add)
-- `expandedHabits` — `Set<id>` of habit cards with inline calendar expanded
 - `homeFilter` — `'all' | 'daily' | 'weekly'` — filters home habit list AND sets `pendingType`
 - `homeWeekOffset` — week nav offset for home week strip (0 = current week, -1 = last week, etc.)
 - `selectedHomeDate` — ISO date string of the day selected in the home week strip (default: today)
 - `detailId` — habit ID currently open in the detail sheet (null when closed)
-- `detailType`, `detailTarget`, `detailNote` — working state for the detail sheet while open
+- `detailName`, `detailType`, `detailTarget`, `detailNote` — working state for the detail sheet while open
 
 Key helpers:
 - `getWeekDays(weekOffset)` — returns 7 ISO date strings Mon–Sun for a given offset
@@ -98,11 +96,12 @@ Key helpers:
 - `streakUnit(habit)` — returns `'d'` or `'w'`
 - `cycleHabitType(id)` — cycles Daily→Weekly→Daily, saves, re-renders
 - `setHabitType(type)` — sets `homeFilter` + `pendingType`, re-renders
-- `showHabitDetail(id)` — opens detail sheet; populates type, target, note fields
+- `showHabitDetail(id)` — opens detail sheet; populates name, type, target, note fields
 - `closeHabitDetail()` — closes detail sheet
 - `setDetailType(type)` — toggles Daily/Weekly in detail sheet, shows/hides target row
 - `changeDetailTarget(delta)` — +/− target stepper in detail sheet (1–7)
-- `saveHabitDetail()` — saves type, target, note from detail sheet; shows "Saved ✓" toast
+- `saveHabitDetail()` — saves name, type, target, note from detail sheet; validates name non-empty; shows "Saved ✓" toast
+- `deleteHabitFromSheet()` — closes sheet, confirms, deletes habit and all history
 - `changeHomeWeek(dir)` — navigates home week strip by ±1 week, updates `selectedHomeDate`
 - `initWeekStripSwipe()` — attaches swipe (touch + mouse) listeners to week strip for week navigation
 - `selectHomeDay(ds)` — sets `selectedHomeDate`, re-renders
@@ -110,13 +109,11 @@ Key helpers:
 
 ### Views
 
-**Home** — Week strip (Mon–Sun dots) at top; tap any past/today dot to select it. Swipe left/right to navigate weeks. Filter/type row (All / ☀️ Daily / 📅 Weekly) filters list and sets `pendingType`. Habit cards grouped into Daily / Weekly sections (or flat when filtered). Each card has: emoji (tap to change), **name (tap to open detail sheet)**, streak badge (d/w unit), type chip (tap to cycle), complete button, calendar toggle, delete. Long-press to drag-reorder (SortableJS).
-
-**Weekly** — 7-column habit×day grid (`wk-sq` cells), week nav, 4 summary stats. Rest days (weekly completions ≥ target) show as `.wk-sq.rest` (neutral) instead of missed (red).
+**Home** — Week strip (Mon–Sun dots) at top; tap any past/today dot to select it. Swipe left/right to navigate weeks. Filter/type row (All / ☀️ Daily / 📅 Weekly) filters list and sets `pendingType`. Habit cards grouped into Daily / Weekly sections (or flat when filtered). Each card: two-column layout — left (emoji + name, wraps freely), right (complete button on top, streak badge below). Tap anywhere on card (except complete button) opens detail sheet. Long-press to drag-reorder (SortableJS).
 
 **Calendar** — top emoji bubble picker selects active habit; single shared calendar grid. Day cells are type-aware: for weekly habits, days in a week where completions ≥ target show as `.day-cell.rest` (neutral) not red. Month summary chips adapt to daily/weekly logic.
 
-**Habit Detail Sheet** — slides up when habit name is tapped. Contains: type toggle (Daily/Weekly), target stepper (weekly only, 1–7×/week), "Why this habit?" textarea. Save button commits all three fields at once.
+**Habit Detail Sheet** — slides up when card is tapped. Contains: name input (editable, validated non-empty), type toggle (Daily/Weekly), target stepper (weekly only, 1–7×/week), "Why is this habit important to me?" textarea. Save + Delete buttons at bottom. Delete closes sheet first, then confirms before deleting.
 
 ### Styling conventions
 
@@ -124,7 +121,9 @@ Key helpers:
 - Missed days: solid red `#ef4444` — must NOT inherit from `--accent`.
 - Rest days (weekly period met): `background: rgba(0,0,0,0.04)` — neutral grey.
 - Done days: solid `var(--accent)`.
-- Mobile-first sizing: fixed widths/heights (e.g. `26px` weekly squares) or `width: min(40px, 100%); aspect-ratio: 1` for calendar day cells.
+- Mobile-first sizing: `width: min(40px, 100%); aspect-ratio: 1` for calendar day cells.
+- Card layout: `.card-body` (flex row) → `.card-left` (emoji + name, wraps) + `.card-right` (complete btn + streak, stacked column).
+- PWA: `viewport-fit=cover` + `apple-mobile-web-app-capable` + `apple-mobile-web-app-status-bar-style: black-translucent`. Nav uses `env(safe-area-inset-bottom)`. App padding-bottom uses `calc(96px + env(safe-area-inset-bottom, 0px))`.
 
 ---
 

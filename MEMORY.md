@@ -133,8 +133,30 @@ Lessons learned, key decisions, and things to remember for future sessions.
 ## Things to Watch Out For
 
 - **SortableJS + re-render timing:** After a drag-reorder, there's an 80ms delay before `render()` is called. This is intentional — SortableJS needs to finish its own DOM cleanup first. Don't remove this delay.
-- **Calendar week starts Sunday, but week strip and weekly tab are Mon–Sun.** `CAL_LABELS = ['Su','Mo','Tu','We','Th','Fr','Sa']`. Don't "fix" this — it's intentional for the calendar grid layout.
+- **Calendar week starts Sunday, but week strip is Mon–Sun.** `CAL_LABELS = ['Su','Mo','Tu','We','Th','Fr','Sa']`. Don't "fix" this — it's intentional for the calendar grid layout.
 - **`target` field is ignored for daily habits.** Don't add target UI to daily habit cards. The data field exists (defaulting to 1) but daily logic never reads it.
 - **`note` field is set via the detail sheet only.** It is not shown on the habit card itself. Don't add it to the card render.
 - **localStorage data is browser-specific.** Always open in Safari — data saved in Safari won't appear in Chrome and vice versa.
-- **`done` check must precede `isPre` check in calGridHtml and weekly grid.** If the user retroactively marks a day done (e.g. yesterday, on a habit created today), `isPre = true` would shadow the `done` state and show the day as grey. Always check `done` first — explicitly-marked dates take priority over the pre-creation guard.
+- **`done` check must precede `isPre` check in calGridHtml.** If the user retroactively marks a day done, `isPre = true` would shadow the `done` state. Always check `done` first.
+- **`min-width: 0` is required on flex children that use text-overflow: ellipsis.** Without it, the element won't shrink below its natural content width, so ellipsis never triggers even with `overflow: hidden` set. Applies to `.card-name`, `.wk-name`, `.cal-habit-name`.
+- **Card onclick + SortableJS:** Adding `onclick` to the card div is safe because SortableJS uses `delay: 400, delayOnTouchOnly: true`. A tap (< 400ms) fires onclick; a long-press starts the drag and SortableJS prevents the click from firing. Don't remove the delay from the Sortable config.
+
+---
+
+## Technical Decisions (this session)
+
+### Weekly tab removed — card-level delete instead
+- **Decision:** Removed the entire weekly tab (HTML, CSS, JS, nav button). Added Delete to the detail sheet instead of keeping a × button on cards.
+- **Why:** Rachel felt the weekly tab wasn't valuable anymore after the card redesign removed quick-glance per-day data. Consolidating delete into the sheet reduces card clutter.
+- **Removed:** All `wk-*` CSS, `view-weekly` HTML, `wkOffset` state, weekly render block, `wk-prev-btn`/`wk-next-btn` event listeners.
+
+### Card redesign — two-column layout, tap-to-open-sheet
+- **Decision:** Cards now have: left column (emoji + name, wraps freely), right column (complete button + streak badge, stacked). Tapping anywhere on the card (except complete button) opens the detail sheet.
+- **Why:** Cleaner look, less chrome. The old card had 5+ interactive elements (emoji picker, name, streak, type chip, cal toggle, delete). Now just 1 (complete button); everything else goes through the sheet.
+- **Emoji editing:** Removed from card entirely. Emoji is now display-only. Not added to sheet — Rachel chose option B (drop emoji editing for now).
+- **Card onclick + stopPropagation:** Complete button uses `event.stopPropagation()` to prevent the card click from firing when marking done.
+
+### GitHub Pages deployment
+- **Decision:** Renamed `habit-tracker.html` → `index.html` so the URL is clean: `https://rachelhfteoh.github.io/habit-tracker/`.
+- **Why:** GitHub Pages serves `index.html` as the default — no filename needed in the URL, cleaner for iPhone home screen.
+- **PWA setup:** `viewport-fit=cover` is required for `env(safe-area-inset-bottom)` to work in standalone mode. Without it, the safe area inset returns 0 even on iPhone X+.
