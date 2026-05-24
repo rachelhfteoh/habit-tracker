@@ -1455,6 +1455,7 @@
     const set  = new Set(dates);
     const td   = todayStr();
     const yest = (() => { const d = new Date(); d.setDate(d.getDate()-1); return d.toISOString().slice(0,10); })();
+    const yearStart = `${new Date().getFullYear()}-01-01`;
 
     let cursor;
     if      (set.has(td))   cursor = new Date(td   + 'T12:00:00');
@@ -1462,7 +1463,9 @@
     else return 0;
 
     let n = 0;
-    while (set.has(cursor.toISOString().slice(0,10))) {
+    while (true) {
+      const ds = cursor.toISOString().slice(0,10);
+      if (ds < yearStart || !set.has(ds)) break;
       n++;
       cursor.setDate(cursor.getDate() - 1);
     }
@@ -1490,12 +1493,13 @@
     const thisWk = thisMon.toISOString().slice(0,10);
     const lastMon = new Date(thisMon); lastMon.setDate(thisMon.getDate()-7);
     const lastWk  = lastMon.toISOString().slice(0,10);
+    const yearStart = `${new Date().getFullYear()}-01-01`;
     let cursor;
     if      (metWeek(thisWk)) cursor = new Date(thisMon);
     else if (metWeek(lastWk)) cursor = new Date(lastMon);
     else return 0;
     let n = 0;
-    while (metWeek(cursor.toISOString().slice(0,10))) {
+    while (metWeek(cursor.toISOString().slice(0,10)) && cursor.toISOString().slice(0,10) >= yearStart) {
       n++;
       cursor.setDate(cursor.getDate() - 7);
     }
@@ -1836,12 +1840,12 @@
           return acc + week.filter(ds => ds <= td && ds >= cr).length;
         }, 0);
         const weekPct    = weekTotal > 0 ? Math.round(weekDone / weekTotal * 100) : 0;
-        const bestStreak = Math.max(...data.habits.map(h => calcStreakByType(h)));
+        const bestStreak = Math.max(0, ...data.habits.map(h => calcStreakByType(h)));
 
         document.getElementById('home-stats').style.display = 'grid';
         document.getElementById('stat-today').textContent   = `${doneSelected}/${total}`;
         document.getElementById('stat-week').textContent    = `${weekPct}%`;
-        document.getElementById('stat-streak').textContent      = bestStreak;
+        document.getElementById('stat-streak').textContent  = bestStreak;
       } else {
         document.getElementById('home-stats').style.display = 'none';
       }
