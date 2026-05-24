@@ -259,7 +259,7 @@
     /* ── Week strip ── */
     .week-strip {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: 26px repeat(7, 1fr) 26px;
       gap: 4px;
       background: rgba(255,255,255,0.75);
       backdrop-filter: blur(12px);
@@ -281,6 +281,23 @@
       cursor: pointer;
     }
     .ws-cell.future { cursor: default; }
+
+    .ws-nav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border-radius: 8px;
+      transition: color 0.12s;
+      align-self: center;
+    }
+    .ws-nav-btn:disabled { opacity: 0.2; cursor: default; }
+    .ws-nav-btn:not(:disabled):active { color: #6366f1; }
 
     .ws-label {
       font-size: 10px;
@@ -1559,7 +1576,8 @@
     if (!strip) return;
     const week = getWeekDays(homeWeekOffset);
     const td   = todayStr();
-    strip.innerHTML = week.map((ds, i) => {
+    const atCurrent = homeWeekOffset >= 0;
+    const dayCells = week.map((ds, i) => {
       const dayNum   = parseInt(ds.split('-')[2]);
       const isToday  = ds === td;
       const isFuture = ds > td;
@@ -1576,6 +1594,10 @@
         <div class="${dotCls}">${dayNum}</div>
       </div>`;
     }).join('');
+    strip.innerHTML =
+      `<button class="ws-nav-btn" onclick="changeHomeWeek(-1)">‹</button>` +
+      dayCells +
+      `<button class="ws-nav-btn" onclick="changeHomeWeek(1)" ${atCurrent ? 'disabled' : ''}>›</button>`;
     initWeekStripSwipe();
   }
 
@@ -1588,13 +1610,13 @@
     strip.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
     strip.addEventListener('touchend',   e => {
       const dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 40) changeHomeWeek(dx > 0 ? 1 : -1);
+      if (Math.abs(dx) > 40) changeHomeWeek(dx > 0 ? -1 : 1);
     }, { passive: true });
     // Mouse (for desktop testing)
     strip.addEventListener('mousedown', e => { startX = e.clientX; });
     strip.addEventListener('mouseup',   e => {
       const dx = e.clientX - startX;
-      if (Math.abs(dx) > 40) changeHomeWeek(dx > 0 ? 1 : -1);
+      if (Math.abs(dx) > 40) changeHomeWeek(dx > 0 ? -1 : 1);
     });
   }
 
@@ -1669,7 +1691,8 @@
         cls += ' done clickable';
         onclick = `onclick="toggleDate('${habit.id}','${ds}',this)"`;
       } else if (isPre) {
-        cls += ' pre';
+        cls += ' pre clickable';
+        onclick = `onclick="toggleDate('${habit.id}','${ds}',this)"`;
       } else {
         const isRest = type === 'weekly' && (weekCounts.get(getWeekStart(ds))||0) >= habitTarget;
         if (isRest) {
