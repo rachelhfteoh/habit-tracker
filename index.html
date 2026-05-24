@@ -25,7 +25,7 @@
     .app {
       max-width: 640px;
       margin: 0 auto;
-      padding: 20px 16px calc(96px + env(safe-area-inset-bottom, 0px));
+      padding: calc(20px + env(safe-area-inset-top, 0px)) 16px calc(96px + env(safe-area-inset-bottom, 0px));
     }
 
     .view { display: none; }
@@ -997,7 +997,7 @@
     .day-cell.rest:hover  { background: rgba(0,0,0,0.07); }
     /* ── Mobile layout ── */
     @media (max-width: 480px) {
-      .app { padding: 14px 12px 90px; }
+      .app { padding: calc(14px + env(safe-area-inset-top, 0px)) 12px calc(90px + env(safe-area-inset-bottom, 0px)); }
 
       .page-header h1 { font-size: 22px; }
       .header-sub     { font-size: 12px; }
